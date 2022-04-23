@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     're_QA.apps.Re_QAConfig',
+    'django.contrib.sites', # ←追加
+    'allauth', # ←追加
+    'allauth.account', # ←追加
+    'allauth.socialaccount', # ←追加
 ]
 
 MIDDLEWARE = [
@@ -127,3 +131,53 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL   = "/media/"
 MEDIA_ROOT  = BASE_DIR / "media"
+
+
+
+
+#django-allauth関係。django.contrib.sitesで使用するSITE_IDを指定する
+SITE_ID = 1
+#django-allauthログイン時とログアウト時のリダイレクトURL
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+
+
+#################django-allauthでのメール認証設定ここから###################
+
+#djangoallauthでメールでユーザー認証する際に必要になる認証バックエンド
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+#ログイン時の認証方法はemailとパスワードとする
+ACCOUNT_AUTHENTICATION_METHOD   = "email"
+
+#ログイン時にユーザー名(ユーザーID)は使用しない
+ACCOUNT_USERNAME_REQUIRED       = "False"
+
+#ユーザー登録時に入力したメールアドレスに、確認メールを送信する事を必須(mandatory)とする
+ACCOUNT_EMAIL_VARIFICATION  = "mandatory"
+
+#ユーザー登録画面でメールアドレス入力を要求する(True)
+ACCOUNT_EMAIL_REQUIRED      = True
+
+EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
+DEFAULT_FROM_EMAIL  = "ここにデフォルトの送信元メールアドレスを指定"
+
+#【重要】APIキーの入力後、GitHubへのプッシュは厳禁
+SENDGRID_API_KEY    = "ここにsendgridのAPIkeyを記述する"
+
+#Sendgrid利用時はサンドボックスモードを無効化しておく。
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+
+#DEBUGがTrueのとき、メールの内容は全て端末に表示させる(実際にメールを送信したい時はここをコメントアウトする)
+if DEBUG:
+    EMAIL_BACKEND   = "django.core.mail.backends.console.EmailBackend"
+
+#################django-allauthでのメール認証設定ここまで###################
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'

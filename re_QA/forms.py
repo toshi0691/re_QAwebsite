@@ -1,12 +1,18 @@
 from django import forms 
-from .models import Topic
+from .models import Topic,TopicReply
 from .models import PhotoList,DocumentList
 
 class TopicForm(forms.ModelForm):
 
     class Meta:
         model   = Topic
-        fields  = [ "comment" ]
+        fields  = [ "comment","genre" ]
+
+class TopicReplyForm(forms.ModelForm):
+
+    class Meta:
+        model   = TopicReply
+        fields  = [ "comment","name","topic" ]
 
 class PhotoListForm(forms.ModelForm):
 

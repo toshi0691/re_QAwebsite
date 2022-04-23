@@ -9,11 +9,28 @@
     <link rel="stylesheet" href="{% static 're_QA/css/style.css' %}">
 </head>
 <body>
-
+    <h1><a href="{% url 're_QA:index' %}"></a>TOP</h1>
     <main class="container">
         {# ここが投稿用フォーム #}
         <form method="POST">
             {% csrf_token %}
+            <div>
+                <label for="mail">ジャンル</label>
+                <select name="genre" size="1" required>
+                    <option value="">ジャンルを選択</option>
+                    <option value="選択肢2">マンション売買</option>
+                    <option value="選択肢3">戸建て売買</option>
+                    <option value="選択肢4">土地売買</option>
+                    <option value="選択肢5">マンション賃貸</option>
+                    <option value="選択肢6">戸建て賃貸</option>
+                    <option value="選択肢7">マンション投資</option>
+                    <option value="選択肢7">不動産相続</option>
+                    <option value="選択肢5">税金</option>
+                    <option value="選択肢6">リフォーム</option>
+                    <option value="選択肢7">融資</option>
+                    <option value="選択肢7">管理</option>
+                </select>
+            </div>
             <textarea class="form-control" name="comment"></textarea>
             <input type="submit" value="送信">
         </form>
@@ -22,11 +39,18 @@
         {% for topic in topics %}
         <div class="topic">
             <div>{{ topic.dt }}</div>
+            <div>{{ topic.genre }}</div>
             <div>名前：{{ topic.name }}</div>
             <div>{{ topic.comment }}</div>
+
+            <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">返信</a>
         </div>
         {% endfor %}
-
+        <h2 class='regibutton'>
+            <a href = "/photo">
+                <button type = "button">フォト</button>
+            </a>
+        </h2>
     </main>
 </body>
 </html>
