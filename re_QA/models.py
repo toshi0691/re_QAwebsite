@@ -1,9 +1,14 @@
 from django.db import models
 from django.utils import timezone
+from users.models import CustomUser
 
+#from django.core.mail import send_mail
+
+#import uuid 
 # Create your models here.
 class Topic(models.Model):
 
+    #user     = models. ForeignKey(CustomUser, on_delete=models.CASCADE)
     name     = models.CharField(verbose_name="投稿者の名前",max_length=100,default="匿名")
     comment  = models.CharField(verbose_name="コメント",max_length=2000)
     dt       = models.DateTimeField(verbose_name="投稿日時",default=timezone.now)
@@ -31,19 +36,25 @@ class DocumentList(models.Model):
 
 
 #質問者会員登録
-#class RegiUser(models.Model):
+'''
+class RegisterUser(models.Model):
     
-#    u_name    = models.CharField(verbose_name="会員登録ユーザーの名前",max_length=30)
-#    home_style     = models.CharField(verbose_name="会員登録ユーザーの居住スタイル",max_length=30)
-#    home_area     =  models.CharField(verbose_name="会員登録ユーザーの居住エリア",max_length=30)
-#    u_mail_address     = models.CharField(verbose_name="会員登録ユーザーのメールアドレス",max_length=70)
-#    u_phone_number     = models.IntegerField(verbose_name="会員登録ユーザーの電話番号",max_length=11)
-#    u_password     = models.CharField(verbose_name="会員登録ユーザーの名前",min_length=8,max_length=20)
+    u_name    = models.CharField(verbose_name="会員登録ユーザーの名前",max_length=30)
+    u_name_kana   = models.CharField(verbose_name="会員登録ユーザーの名前",max_length=30)
+    home_style     = models.CharField(verbose_name="会員登録ユーザーの居住スタイル",max_length=30)
+    home_area     =  models.CharField(verbose_name="会員登録ユーザーの居住エリア",max_length=30)
+    u_mail_address     = models.CharField(verbose_name="会員登録ユーザーのメールアドレス",max_length=70)
+    ###長さ10桁までかも↓
+    u_phone_number     = models.IntegerField(verbose_name="会員登録ユーザーの電話番号")
+    u_password     = models.CharField(verbose_name="会員登録ユーザーの名前",max_length=20)
+'''
 
 
+
+    
 
 #回答者会員登録
-#class RegiAnswerer(models.Model):
+#class RegisterAnswerer(models.Model):
     
 #    a_name     = models.CharField(verbose_name="会員登録回答者の名前",max_length=30)
 #    a_mail_address     = models.CharField(verbose_name="会員登録回答者のメールアドレス",max_length=70)

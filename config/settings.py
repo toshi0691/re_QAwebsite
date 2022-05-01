@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'allauth', # ←追加
     'allauth.account', # ←追加
     'allauth.socialaccount', # ←追加
+    'users.apps.UsersConfig',
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -59,7 +61,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / "templates" ],
+        'DIRS': [ BASE_DIR / "templates",
+                  #BASE_DIR / "allauth",
+                ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -178,6 +182,12 @@ if DEBUG:
 
 #################django-allauthでのメール認証設定ここまで###################
 
+#Userモデル何にするかの指定
+AUTH_USER_MODEL = 'users.CustomUser'
+#signupのときは、usersアプリの、forms.pyのSignupFormを使うよ指定
+ACCOUNT_FORMS   = { "signup":"users.forms.SignupForm"}
+# 同じやり方でlogin時のformを編集可能
+#'login': 'accounts.forms.LoginForm',
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
