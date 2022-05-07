@@ -24,11 +24,15 @@ class IndexView(View):
         posted  = Topic( comment = request.POST["comment"] )
         posted.save()
         """
+        print(request.POST)
+        copied          = request.POST.copy()
+        copied["user"]  = request.user.id
+        form    = TopicForm(copied)
         
-        form    = TopicForm(request.POST)
-
+        
         if form.is_valid():
             print("バリデーションOK")
+            
             #保存する
             form.save()
         else:
@@ -112,7 +116,7 @@ single   = SingleView.as_view()
 #########################################自分のした質問を一覧表示させるメソッド######################
 
 #########################################ユーザ会員登録ページ######################################
-
+'''
 class RegisterUserView(View):
     
     def get(self, request, *args, **kwargs):
@@ -137,7 +141,7 @@ class RegisterUserView(View):
       
 register_user    = RegisterUserView.as_view()
 
-
+'''
 #関数ベースのビュー
 '''
 def index(request):

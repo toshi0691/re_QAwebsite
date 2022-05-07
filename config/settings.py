@@ -62,7 +62,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [ BASE_DIR / "templates",
-                  #BASE_DIR / "allauth",
+                  BASE_DIR / "allauth",
                 ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -168,7 +168,7 @@ ACCOUNT_EMAIL_VARIFICATION  = "mandatory"
 ACCOUNT_EMAIL_REQUIRED      = True
 
 EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
-DEFAULT_FROM_EMAIL  = "ここにデフォルトの送信元メールアドレスを指定"
+DEFAULT_FROM_EMAIL  = "toshi0905chukyo@outlook.jp"
 
 #【重要】APIキーの入力後、GitHubへのプッシュは厳禁
 SENDGRID_API_KEY    = "ここにsendgridのAPIkeyを記述する"

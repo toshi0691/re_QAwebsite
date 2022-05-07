@@ -7,9 +7,20 @@
     <title>簡易掲示板</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 're_QA/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!--日本語化用JS-->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+    <script src="{% static 're_QA/js/script.js' %}"></script>
 </head>
 <body>
-    <h1><a href="{% url 're_QA:index' %}"></a>TOP</h1>
+    <h1><a href="{% url 're_QA:index' %}">TOP</a></h1>
+    {% if request.user.is_authenticated %}
+        <div>{{ request.user.u_first_name }} さん</div>
+        <a href="{% url 'account_logout' %}">ログアウト</a>
+    {% else %}
+        <a href="{% url 'account_login' %}">新規会員登録・ログイン</a>
+    {% endif %}
     <main class="container">
         {# ここが投稿用フォーム #}
         <form method="POST">
@@ -18,19 +29,27 @@
                 <label for="mail">ジャンル</label>
                 <select name="genre" size="1" required>
                     <option value="">ジャンルを選択</option>
-                    <option value="選択肢2">マンション売買</option>
-                    <option value="選択肢3">戸建て売買</option>
-                    <option value="選択肢4">土地売買</option>
-                    <option value="選択肢5">マンション賃貸</option>
-                    <option value="選択肢6">戸建て賃貸</option>
-                    <option value="選択肢7">マンション投資</option>
-                    <option value="選択肢7">不動産相続</option>
-                    <option value="選択肢5">税金</option>
-                    <option value="選択肢6">リフォーム</option>
-                    <option value="選択肢7">融資</option>
-                    <option value="選択肢7">管理</option>
+                    <option value="マンション売買">マンション売買</option>
+                    <option value="戸建て売買">戸建て売買</option>
+                    <option value="土地売買">土地売買</option>
+                    <option value="マンション賃貸">マンション賃貸</option>
+                    <option value="戸建て賃貸">戸建て賃貸</option>
+                    <option value="マンション投資">マンション投資</option>
+                    <option value="不動産相続">不動産相続</option>
+                    <option value="税金">税金</option>
+                    <option value="リフォーム">リフォーム</option>
+                    <option value="融資">融資</option>
+                    <option value="管理">管理</option>
                 </select>
             </div>
+            <!--
+            <div>質問受付期限
+                
+                    <input name="deadline" id="date" type="text" readonly>
+                    <input name="deadline" id="time" type="text" readonly>
+                    <input name="deadline" id="dt" type="text" readonly>
+            </div>
+            -->
             <textarea class="form-control" name="comment"></textarea>
             <input type="submit" value="送信">
         </form>

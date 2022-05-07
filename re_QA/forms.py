@@ -8,7 +8,7 @@ class TopicForm(forms.ModelForm):
         model   = Topic
         
 #バリデーション対象のフィールドfieldsに入れる
-        fields  = [ "comment","genre" ]
+        fields  = [ "comment","genre","user" ]
 
 class TopicReplyForm(forms.ModelForm):
 

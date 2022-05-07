@@ -1,22 +1,34 @@
 from django.db import models
 from django.utils import timezone
-from users.models import CustomUser
+from django.conf import settings
+from django.core.validators import MinValueValidator
 
 #from django.core.mail import send_mail
 
-#import uuid 
+import uuid 
 # Create your models here.
 class Topic(models.Model):
 
-    #user     = models. ForeignKey(CustomUser, on_delete=models.CASCADE)
+    id       = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    user     = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name="ユーザー",on_delete=models.CASCADE)
     name     = models.CharField(verbose_name="投稿者の名前",max_length=100,default="匿名")
     comment  = models.CharField(verbose_name="コメント",max_length=2000)
     dt       = models.DateTimeField(verbose_name="投稿日時",default=timezone.now)
     genre    = models.CharField(verbose_name="質問のジャンル",max_length=20)
-    
+    def one_week():
+        return timezone.now() + timezone.timedelta(days=7)
+
+    deadline    = models.DateTimeField( verbose_name="回答受付期限", default=one_week )
+
     def __str__(self):
         return self.comment
     
+    #TODO:userモデルと1対多のリレーションを組む
+    #TODO:この質問に対して寄せられた回答数をカウントするメソッド
+    #TODO:この質問に対して寄せられた回答を出力するメソッド
+    #TODO:質問の期限が来たら回答を受け付けないようにする
+    
+
 class TopicReply(models.Model):
     topic    = models.ForeignKey(Topic,verbose_name="対象トピック",on_delete=models.CASCADE)
     
@@ -24,6 +36,21 @@ class TopicReply(models.Model):
     comment  = models.CharField(verbose_name="コメント",max_length=2000)
     dt       = models.DateTimeField(verbose_name="投稿日時",default=timezone.now)
     
+#質問に対して、一次回答は回答者登録者のみでき、二次以降は誰でも回答可能に。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 
