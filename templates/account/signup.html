@@ -11,7 +11,98 @@
 
 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
-  {{ form.as_p }}
+{#フォームの内容をpタグを使って表示するという書き方#}
+{#{{ form.as_p }}#}
+
+<!---->{{ form.non_field_errors }}
+    <p class="field">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        <span class="helptext">{{ form.username.help_text }}</span>
+        {{ form.username.errors }}
+    </p>
+    <p class="field">
+        {{ form.u_first_name.label_tag }}
+        {{ form.u_first_name }}
+        <span class="helptext">{{ form.u_first_name.help_text }}</span>
+        {{ form.u_first_name.errors }}
+    </p>
+    <p class="field">
+        {{ form.u_last_name.label_tag }}
+        {{ form.u_last_name }}
+        {{ form.u_last_name.errors }}
+    </p>
+    <p class="field">
+        {{ form.u_first_name_kana.label_tag }}
+        {{ form.u_first_name_kana }}
+        {{ form.u_first_name_kana.errors }}
+    </p>
+    <p class="field">
+      {{ form.u_last_name_kana.label_tag }}
+      {{ form.u_last_name_kana }}
+      {{ form.u_last_name_kana.errors }}
+    </p>
+    {% if request.GET.answer %}
+    {# ここに回答者用 #}
+    <input class="field" name="resident_area" value="空白" style="display:none">
+    </input>
+    <input class="field" name="resident_style" value="空白" style="display:none">
+    </input>
+      <p class="field">
+        {{ form.company.label_tag }}
+        {{ form.company }}
+        {{ form.company.errors }}
+      </p><input class="field" name="resident_area" value="空白" style="display:none">
+    {% else %}
+    {# ここに質問者用 #}
+      <p class="field">
+        {{ form.resident_area.label_tag }}
+        {{ form.resident_area }}
+        {{ form.resident_area.errors }}
+      </p>
+      <p class="field">
+        {{ form.resident_style.label_tag }}
+        {{ form.resident_style }}
+        {{ form.resident_style.errors }}
+      </p>
+      <input class="field" name="company" value="空白" style="display:none">
+      </input>
+    {% endif %}
+    <p class="field">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {{ form.email.errors }}
+    </p>
+    <p class="field">
+      {{ form.phone_number.label_tag }}
+      {{ form.phone_number }}
+      {{ form.phone_number.errors }}
+    </p>
+    <p class="field">
+      {{ form.password1.label_tag }}
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+    </p>
+    <ul>
+      <li>
+        "あなたの他の個人情報と似ているパスワードにはできません。"
+      </li>
+      <li>
+        "パスワードは最低 8 文字以上必要です。"
+      </li>
+      <li>
+        "よく使われるパスワードにはできません。"
+      </li>
+      <li>
+        "数字だけのパスワードにはできません。"
+      </li>
+    </ul>
+    <p class="field">
+      {{ form.password2.label_tag }}
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+    </p>
+  <!---->
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
   {% endif %}

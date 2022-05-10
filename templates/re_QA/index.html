@@ -14,6 +14,12 @@
     <script src="{% static 're_QA/js/script.js' %}"></script>
 </head>
 <body>
+    <h1>
+        <a href="{% url 'account_signup' %}?answer=true">回答者会員登録</a>
+    </h1>
+    <h1>
+        <a href="{% url 'account_signup' %}">質問者会員登録</a>
+    </h1>
     <h1><a href="{% url 're_QA:index' %}">TOP</a></h1>
     {% if request.user.is_authenticated %}
         <div>{{ request.user.u_first_name }} さん</div>

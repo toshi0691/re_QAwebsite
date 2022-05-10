@@ -116,32 +116,18 @@ single   = SingleView.as_view()
 #########################################自分のした質問を一覧表示させるメソッド######################
 
 #########################################ユーザ会員登録ページ######################################
-'''
-class RegisterUserView(View):
+
+class RegisterAnswererView(View):
     
     def get(self, request, *args, **kwargs):
                    
-        return render(request,"re_QA/register_user.html")
+        return render(request,"re_QA/register_answerer.html")
         
-    def post(self, request, pk, *args, **kwargs):
-            
-        form    = RegisterUserForm(request.POST)
-
-        if form.is_valid():
-            print("バリデーションOK")
-            #保存する
-            form.save()
-        else:
-            print("バリデーションNG")
-
-            #バリデーションNGの理由を表示させる
-            print(form.errors)
-
-        return redirect("re_QA:index.html")            
+                
       
-register_user    = RegisterUserView.as_view()
+register_answerer    = RegisterAnswererView.as_view()
 
-'''
+
 #関数ベースのビュー
 '''
 def index(request):

@@ -37,8 +37,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number       = models.CharField(verbose_name='電話番号',
                                         validators=[RegexValidator(r'^0[0-9]{9,10}$', '正しい電話番号を入力して下さい')
                                                     ],max_length=11)
+    answer             = models.BooleanField(verbose_name='登録が質問者か回答者かの判断',default=False)
+####################質問者固有フィールド################
     resident_area      = models.CharField(verbose_name='居住エリア', max_length=30)
     resident_style     = models.CharField(verbose_name='居住形態', max_length=30)
+####################回答者固有フィールド################
+    company            = models.CharField(verbose_name="会社名",max_length=50)
+######################################################
+
     is_staff           = models.BooleanField(
                             _('staff status'),
                             default=False,
@@ -83,4 +89,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
 ##################################################################
 
+'''
+class AnswerUser(AbstractBaseUser, PermissionsMixin):
+    username_validator = UnicodeUsernameValidator()
 
+    id                 = models.UUIDField( default=uuid.uuid4, primary_key=True, editable=False )
+    
+    resident_area      = models.CharField(verbose_name='居住エリア', max_length=30)
+    resident_style     = models.CharField(verbose_name='居住形態', max_length=30)
+'''

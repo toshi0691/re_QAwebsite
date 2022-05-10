@@ -21,7 +21,7 @@
         <div>名前:{{ topic.name }}</div>
         <div>{{ topic.comment }}</div>
     </div>
-
+    
     <form action="" method="POST">
         {% csrf_token %}
         <input type="text" name="name" placeholder="名前">
