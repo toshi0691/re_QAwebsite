@@ -12,9 +12,22 @@
 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
 {#フォームの内容をpタグを使って表示するという書き方#}
-{#{{ form.as_p }}#}
+{{ form.as_p }}
 
-<!---->{{ form.non_field_errors }}
+{% if request.GET.answer %}
+<p>
+  <input type="text" name="company" placeholder="所属会社" maxlength="200" required>
+</p>
+{% else %}
+<p>
+  <input type="text" name="resident_area" placeholder="居住エリア" maxlength="200" required>
+</p>
+<p>
+  <input type="text" name="resident_style" placeholder="居住スタイル" maxlength="200" required>
+</p>
+{% endif %}
+
+{% comment %} <!---->{{ form.non_field_errors }}
     <p class="field">
         {{ form.username.label_tag }}
         {{ form.username }}
@@ -44,15 +57,10 @@
     </p>
     {% if request.GET.answer %}
     {# ここに回答者用 #}
-    <input class="field" name="resident_area" value="空白" style="display:none">
-    </input>
-    <input class="field" name="resident_style" value="空白" style="display:none">
-    </input>
       <p class="field">
         {{ form.company.label_tag }}
         {{ form.company }}
         {{ form.company.errors }}
-      </p><input class="field" name="resident_area" value="空白" style="display:none">
     {% else %}
     {# ここに質問者用 #}
       <p class="field">
@@ -65,8 +73,6 @@
         {{ form.resident_style }}
         {{ form.resident_style.errors }}
       </p>
-      <input class="field" name="company" value="空白" style="display:none">
-      </input>
     {% endif %}
     <p class="field">
       {{ form.email.label_tag }}
@@ -78,10 +84,12 @@
       {{ form.phone_number }}
       {{ form.phone_number.errors }}
     </p>
+    <!--余裕あれば要修正-->
     <p class="field">
       {{ form.password1.label_tag }}
       {{ form.password1 }}
       {{ form.password1.errors }}
+      {{ form.password2.errors }}
     </p>
     <ul>
       <li>
@@ -101,7 +109,7 @@
       {{ form.password2.label_tag }}
       {{ form.password2 }}
       {{ form.password2.errors }}
-    </p>
+    </p> {% endcomment %}
   <!---->
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />

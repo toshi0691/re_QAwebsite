@@ -1,9 +1,13 @@
 from django.shortcuts import render,redirect
 from django.views import View
-from .models import Topic
-from .forms import TopicForm
+from .models import Topic,AnswerUser,QuestionUser
+from .forms import AnswerUserForm, TopicForm
+from users.forms import SignupForm
+from users.models import CustomUser
 from .models import PhotoList,DocumentList,TopicReply
 from .forms import PhotoListForm,DocumentListForm,TopicReplyForm #,RegisterUserForm
+from allauth.account.models import EmailAddress
+from django.contrib.auth.mixins import LoginRequiredMixin
 import magic
 
 
@@ -117,15 +121,64 @@ single   = SingleView.as_view()
 
 #########################################ユーザ会員登録ページ######################################
 
-class RegisterAnswererView(View):
-    
+#########################################質問ユーザ会員登録情報編集ページ######################################
+
+class UpdateQuestionUserView(View):
+
     def get(self, request, *args, **kwargs):
-                   
-        return render(request,"re_QA/register_answerer.html")
+
+        if not request.user.is_authenticated:
+            print("未認証")
+            return redirect("account_login")
         
-                
-      
-register_answerer    = RegisterAnswererView.as_view()
+        context = {}
+
+        context["users"]         = CustomUser.objects.all()
+        context["answer_user"]   = AnswerUser.objects.filter(user=request.user.id).first()
+        context["question_user"] = QuestionUser.objects.filter(user=request.user.id).first()
+
+        print(context["question_user"])
+
+
+        return render(request,"re_QA/update_question_user.html",context)
+
+    def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            print("未認証")
+            return redirect("account_login")
+
+        user    = CustomUser.objects.filter(id=request.user.id).first()
+        form    = SignupForm(request.POST,instance=user)
+        # user_inf_a  = AnswerUser.objects.filter(user=request.user.id).first()
+        # form_a  = AnswerUserForm(request.POST,instance=user_inf_a)
+        # user_inf_b  = QuestionUser.objects.filter(user=request.user.id).first()
+        # form_b  = QuestionUserForm(request.POST,instance=user_inf_b)
+
+        if form.is_valid():
+            print("バリデーションOK")
+            form.save()
+        else:
+            print("バリデーションNG")
+            print(form.errors)
+            
+        # if form_a.is_valid():
+        #     print("バリデーションOK")
+        #     form_a.save()
+        # else:
+        #     print("バリデーションNG")
+        #     print(form_a.errors)
+            
+        # if form_b.is_valid():
+        #     print("バリデーションOK")
+        #     form_b.save()
+        # else:
+        #     print("バリデーションNG")
+        #     print(form_b.errors)
+
+        return redirect("re_QA:update_question_user")
+
+update_question_user   = UpdateQuestionUserView.as_view()
 
 
 #関数ベースのビュー
@@ -147,7 +200,10 @@ class QuestionsView(View):
     def post(self, request, *args, **kwargs):
 '''      
 
-
+# class ProfileView(View, LoginRequiredMixin):
+    
+#     def get(self, request, *args, **kwargs):
+        
 
 
 
@@ -197,3 +253,11 @@ class DocumentView(View):
         return redirect("re_QA:document")
 
 document    = DocumentView.as_view()
+
+#############################メール認証のURLをクリックした後に会員登録が完了する###########################
+
+def mail_confirm(self, request):
+    if not EmailAddress.objects.filter(user=request.user.id, verified=True):
+        return redirect("account_email_verification_sent") 
+
+

@@ -28,21 +28,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                 'unique': _("A user with that username already exists."),
                             },
                         )
-    u_first_name       = models.CharField(verbose_name='姓', max_length=20)
-    u_last_name        = models.CharField(verbose_name='名', max_length=20)
-    u_first_name_kana  = models.CharField(verbose_name='セイ', max_length=30)
-    u_last_name_kana   = models.CharField(verbose_name='メイ', max_length=30)
+    u_last_name        = models.CharField(verbose_name='姓', max_length=20)
+    u_first_name       = models.CharField(verbose_name='名', max_length=20)
+    u_last_name_kana   = models.CharField(verbose_name='セイ', max_length=30)
+    u_first_name_kana  = models.CharField(verbose_name='メイ', max_length=30)
+    
     email              = models.EmailField(_('email address'))
     #phone_number       = PhoneNumberField(verbose_name='電話番号',unique = True, null = False)
     phone_number       = models.CharField(verbose_name='電話番号',
                                         validators=[RegexValidator(r'^0[0-9]{9,10}$', '正しい電話番号を入力して下さい')
                                                     ],max_length=11)
-    answer             = models.BooleanField(verbose_name='登録が質問者か回答者かの判断',default=False)
-####################質問者固有フィールド################
-    resident_area      = models.CharField(verbose_name='居住エリア', max_length=30)
-    resident_style     = models.CharField(verbose_name='居住形態', max_length=30)
-####################回答者固有フィールド################
-    company            = models.CharField(verbose_name="会社名",max_length=50)
+    
+
 ######################################################
 
     is_staff           = models.BooleanField(
@@ -64,7 +61,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD     = 'email'
     USERNAME_FIELD  = 'username'
-    REQUIRED_FIELDS = ['email','u_first_name','u_last_name','u_first_name_kana','u_last_name_kana','phone_number','resident_area','resident_style']
+    REQUIRED_FIELDS = ['email','u_first_name','u_last_name','u_first_name_kana','u_last_name_kana','phone_number']
     #管理画面の表示で、ある類いのユーザをまとめて設定を変更したいときには複数のユーザリンクをクリックして編集できるようにでき、
     #単体を編集したいときは、単体ユーザの方が使われるようにするという設定
     class Meta:

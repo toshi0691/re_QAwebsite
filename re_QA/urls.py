@@ -8,6 +8,6 @@ urlpatterns = [
     path('questions/', views.questions, name="questions"),
     path("photo/",views.photo, name="photo"),
     path("document/",views.document, name="document"),
-    path("register_answerer/",views.register_answerer, name="register_answerer"),
+    path("update_question_user/",views.update_question_user, name="update_question_user"),
     
 ]

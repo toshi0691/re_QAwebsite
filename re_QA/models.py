@@ -19,12 +19,15 @@ class Topic(models.Model):
         return timezone.now() + timezone.timedelta(days=7)
 
     deadline    = models.DateTimeField( verbose_name="回答受付期限", default=one_week )
+    
 
     def __str__(self):
         return self.comment
     
     #TODO:userモデルと1対多のリレーションを組む
     #TODO:この質問に対して寄せられた回答数をカウントするメソッド
+    # def count_reply():
+        
     #TODO:この質問に対して寄せられた回答を出力するメソッド
     #TODO:質問の期限が来たら回答を受け付けないようにする
     
@@ -39,7 +42,28 @@ class TopicReply(models.Model):
 #質問に対して、一次回答は回答者登録者のみでき、二次以降は誰でも回答可能に。
 
 
-
+class QuestionUser(models.Model):
+    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    resident_area = models.CharField(verbose_name="質問者の居住エリア",max_length=30)
+    resident_style = models.CharField(verbose_name="質問者の居住スタイル",max_length=30)
+    
+    #(https://stackoverflow.com/questions/39883950/str-returned-non-string-type-tuple)
+    # def __str__(self):
+    #     template = '{0.resident_area}{0.resident_style}'
+    #     return template.format(self)
+    
+class AnswerUser(models.Model):
+    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    company  = models.CharField(verbose_name="回答者の会社名",max_length=30)
+    approval    = models.BooleanField(verbose_name="回答権利",default=False)
+    
+    def __str__(self):
+        return self.company
+    
+    
+class AnswerUserProfile(models.Model):
+    user        = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    
 
 
 
