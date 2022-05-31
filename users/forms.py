@@ -8,6 +8,10 @@ class SignupForm(UserCreationForm):
         fields  = ("username","u_last_name","u_first_name","u_last_name_kana","u_first_name_kana","email","phone_number")
         #
 
+    #def signup(self, request, user):
+    #    user.is_active = False
+    #    user.save()
+    
     #TODO:ここで追加のフォームの保存もするため、requestを引数として受ける。argsで受け取っても良いが混乱するので。
     def save(self, request, commit=True, *args, **kwargs):
 
@@ -23,7 +27,7 @@ class SignupForm(UserCreationForm):
             user    = super().save(commit=False)
 
             #ここで生のパスワードをハッシュ化した上で、モデルオブジェクトの属性にセットする。
-            password = self.cleaned_data["password"]
+            password = self.cleaned_data["password1"]
             if password:
                 user.set_password(password)
 
@@ -64,3 +68,14 @@ class UpdateForm(SignupForm):
         del self.fields['password2']
 
 
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
+#from django.contrib.auth.models import User
+
+@receiver(pre_save, sender=CustomUser)
+def set_new_user_inactive(sender, instance, **kwargs):
+    if instance._state.adding is True:
+        print("Creating Inactive User")
+        instance.is_active = False
+    else:
+        print("Updating User Record")
