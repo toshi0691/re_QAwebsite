@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'allauth.account', # ←追加
     'allauth.socialaccount', # ←追加
     'users.apps.UsersConfig',
-    "phonenumber_field",
+    #"phonenumber_field",
 ]
 
 MIDDLEWARE = [
