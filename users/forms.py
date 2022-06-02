@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from re_QA.models import QuestionUser, AnswerUser
 from re_QA.forms import QuestionUserForm,AnswerUserForm
 
 class SignupForm(UserCreationForm):
@@ -47,6 +48,11 @@ class SignupForm(UserCreationForm):
         else:
             print(question_form.errors)
             print("質問者ユーザーではない")
+            if QuestionUser.objects.filter(user=user.id):
+                quser = QuestionUser.objects.filter(user=user.id)[0]
+                fields_to_update = ("resident_area", "resident_style")
+                [setattr(quser, field, copied[field]) for field in fields_to_update]
+                quser.save()
 
         answer_form     = AnswerUserForm(copied)
 
@@ -56,6 +62,11 @@ class SignupForm(UserCreationForm):
         else:
             print(answer_form.errors)
             print("回答者ユーザーではない")
+            if AnswerUser.objects.filter(user=user.id):
+                quser = AnswerUser.objects.filter(user=user.id)[0]
+                fields_to_update = ("AnswerUser", "approval")
+                [setattr(quser, field, copied[field]) for field in fields_to_update]
+                quser.save()
             
         #ここでuserをreturnしなければアカウント新規作成ページから、ログイン後のページへ遷移しない
         #ログイン後のページに遷移するため、userのis_activeをチェックした上で遷移する。もし、userオブジェクトが返却されなければNoneが入る。分岐でNoneに対してis_activeは存在し得ない。故にエラーが出る。
