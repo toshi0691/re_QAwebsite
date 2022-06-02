@@ -45,6 +45,7 @@ class SignupForm(UserCreationForm):
             print("質問者ユーザー登録")
             question_form.save()
         else:
+            print(question_form.errors)
             print("質問者ユーザーではない")
 
         answer_form     = AnswerUserForm(copied)
@@ -53,6 +54,7 @@ class SignupForm(UserCreationForm):
             print("回答者ユーザー登録")
             answer_form.save()
         else:
+            print(answer_form.errors)
             print("回答者ユーザーではない")
             
         #ここでuserをreturnしなければアカウント新規作成ページから、ログイン後のページへ遷移しない
