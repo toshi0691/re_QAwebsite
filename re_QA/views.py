@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.views import View
 from .models import Topic,AnswerUser,QuestionUser
 from .forms import AnswerUserForm, TopicForm
-from users.forms import SignupForm
+from users.forms import SignupForm, UpdateForm
 from users.models import CustomUser
 from .models import PhotoList,DocumentList,TopicReply
 from .forms import PhotoListForm,DocumentListForm,TopicReplyForm #,RegisterUserForm
@@ -140,6 +140,7 @@ class UpdateQuestionUserView(View):
         print(context["question_user"])
 
 
+
         return render(request,"re_QA/update_question_user.html",context)
 
     def post(self, request, *args, **kwargs):
@@ -148,8 +149,10 @@ class UpdateQuestionUserView(View):
             print("未認証")
             return redirect("account_login")
 
+
+
         user    = CustomUser.objects.filter(id=request.user.id).first()
-        form    = SignupForm(request.POST,instance=user)
+        form    = UpdateForm(request.POST,instance=user)
         # user_inf_a  = AnswerUser.objects.filter(user=request.user.id).first()
         # form_a  = AnswerUserForm(request.POST,instance=user_inf_a)
         # user_inf_b  = QuestionUser.objects.filter(user=request.user.id).first()
@@ -157,11 +160,11 @@ class UpdateQuestionUserView(View):
 
         if form.is_valid():
             print("バリデーションOK")
-            form.save()
+            form.save(request)
         else:
             print("バリデーションNG")
             print(form.errors)
-            
+            #form.save(request) 
         # if form_a.is_valid():
         #     print("バリデーションOK")
         #     form_a.save()

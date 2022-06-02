@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'allauth.account', # ←追加
     'allauth.socialaccount', # ←追加
     'users.apps.UsersConfig',
-    "phonenumber_field",
+    #"phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -163,19 +163,19 @@ ACCOUNT_AUTHENTICATION_METHOD   = "email"
 ACCOUNT_USERNAME_REQUIRED       = "False"
 
 #ユーザー登録時に入力したメールアドレスに、確認メールを送信する事を必須(mandatory)とする
-ACCOUNT_EMAIL_VARIFICATION  = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION  = "mandatory"
 
 #ユーザー登録画面でメールアドレス入力を要求する(True)
 ACCOUNT_EMAIL_REQUIRED      = True
 
-EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
-DEFAULT_FROM_EMAIL  = "toshi0905chukyo@outlook.jp"
+#EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
+#DEFAULT_FROM_EMAIL  = "toshi0905chukyo@outlook.jp"
 
 #【重要】APIキーの入力後、GitHubへのプッシュは厳禁
-SENDGRID_API_KEY    = "ここにsendgridのAPIkeyを記述する"
+#SENDGRID_API_KEY    = "ここにsendgridのAPIkeyを記述する"
 
 #Sendgrid利用時はサンドボックスモードを無効化しておく。
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+#SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 #DEBUGがTrueのとき、メールの内容は全て端末に表示させる(実際にメールを送信したい時はここをコメントアウトする)
 if DEBUG:
@@ -192,3 +192,18 @@ ACCOUNT_FORMS   = { "signup":"users.forms.SignupForm"}
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+############################################
+ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.SignupForm"
+
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # !!!! very important for django-allauth specifically
