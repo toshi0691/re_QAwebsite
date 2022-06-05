@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from .models import Topic,AnswerUser,QuestionUser
-from .forms import AnswerUserForm, TopicForm
+from .forms import AnswerUserForm, TopicForm, AnswerUserProfileForm
 from users.forms import SignupForm, UpdateForm
 from users.models import CustomUser
 from .models import PhotoList,DocumentList,TopicReply
@@ -149,7 +149,7 @@ class UpdateQuestionUserView(View):
             return redirect("account_login")
 
         user    = CustomUser.objects.filter(id=request.user.id).first()
-        form    = UpdateForm(request.POST,instance=user)
+        form    = UpdateForm(request.POST, instance=user)
         # user_inf_a  = AnswerUser.objects.filter(user=request.user.id).first()
         # form_a  = AnswerUserForm(request.POST,instance=user_inf_a)
         # user_inf_b  = QuestionUser.objects.filter(user=request.user.id).first()
@@ -178,7 +178,50 @@ class UpdateQuestionUserView(View):
 
         return redirect("re_QA:update_question_user")
 
-update_question_user   = UpdateQuestionUserView.as_view()
+#update_question_user   = UpdateQuestionUserView.as_view()
+
+
+class UpdateProfileView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            print("未認証")
+            return redirect("account_login")
+        
+        context = {}
+
+        context["users"]         = CustomUser.objects.all()
+        context["answer_user"]   = AnswerUser.objects.filter(user=request.user.id).first()
+        context["question_user"] = QuestionUser.objects.filter(user=request.user.id).first()
+
+        print(context["question_user"])
+
+
+        return render(request,"re_QA/update_profile.html",context)
+
+    def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            print("未認証")
+            return redirect("account_login")
+
+        user    = CustomUser.objects.filter(id=request.user.id).first()
+        form    = AnswerUserProfileForm(request.POST, instance=user)
+        # user_inf_a  = AnswerUser.objects.filter(user=request.user.id).first()
+        # form_a  = AnswerUserForm(request.POST,instance=user_inf_a)
+        # user_inf_b  = QuestionUser.objects.filter(user=request.user.id).first()
+        # form_b  = QuestionUserForm(request.POST,instance=user_inf_b)
+
+        if form.is_valid():
+            print("バリデーションOK")
+            form.save(request)
+        else:
+            print("バリデーションNG")
+            print(form.errors)
+
+        return redirect("re_QA:update_profile")
+
 
 
 #関数ベースのビュー

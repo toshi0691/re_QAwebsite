@@ -22,6 +22,17 @@ class SignupForm(UserCreationForm):
             user = CustomUser.objects.filter(username=username)[0]
             fields_to_update = ("username","u_last_name","u_first_name","u_last_name_kana","u_first_name_kana","email","phone_number")
             [setattr(user, field, self.cleaned_data[field]) for field in fields_to_update]
+            #for field in ("username","u_last_name","u_first_name","u_last_name_kana","u_first_name_kana","email","phone_number"):
+                #setattr(user, field, self.cleaned_data[field])
+            """
+            user.username = self.cleaned_data['username']
+            user.u_last_name = self.cleaned_data['u_last_name']
+            user.u_first_name = self.cleaned_data['u_first_name']
+            user.u_last_name_kana = self.cleaned_data['u_last_name_kana']
+            user.u_first_name_kana = self.cleaned_data['u_first_name_kana']
+            #...
+            """
+
             user.save()
         else:
             #ここで、ユーザーモデルのオブジェクト作成を行っている(ただし、保存をしない)
@@ -47,7 +58,7 @@ class SignupForm(UserCreationForm):
             question_form.save()
         else:
             print(question_form.errors)
-            print("質問者ユーザーではない")
+            print("質問者ユーザーではないか、既に質問者ユーザが存在する")
             if QuestionUser.objects.filter(user=user.id):
                 quser = QuestionUser.objects.filter(user=user.id)[0]
                 fields_to_update = ("resident_area", "resident_style")
