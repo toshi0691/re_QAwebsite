@@ -52,6 +52,7 @@ class SignupForm(UserCreationForm):
         
         question_form   = QuestionUserForm(copied)
 
+        qa_user_identified = False
         #バリデーションOKになるには、userとseriousnessがモデルで定義したルールに則っていればよい。それ以外に余計なものが入っていたとしてもNGにはならない(除外されるだけ)
         if question_form.is_valid():
             print("質問者ユーザー登録")
@@ -64,6 +65,7 @@ class SignupForm(UserCreationForm):
                 fields_to_update = ("resident_area", "resident_style")
                 [setattr(quser, field, copied[field]) for field in fields_to_update]
                 quser.save()
+                qa_user_identified = True
 
         answer_form     = AnswerUserForm(copied)
 
@@ -73,9 +75,9 @@ class SignupForm(UserCreationForm):
         else:
             print(answer_form.errors)
             print("回答者ユーザーではない")
-            if AnswerUser.objects.filter(user=user.id):
+            if not qa_user_identified and AnswerUser.objects.filter(user=user.id):
                 quser = AnswerUser.objects.filter(user=user.id)[0]
-                fields_to_update = ("AnswerUser", "approval")
+                fields_to_update = ("company", "approval")
                 [setattr(quser, field, copied[field]) for field in fields_to_update]
                 quser.save()
             
