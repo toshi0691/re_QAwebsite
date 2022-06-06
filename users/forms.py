@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from re_QA.forms import QuestionUserForm,AnswerUserForm
+from re_QA.models import QuestionUser,AnswerUser
 
 class SignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -18,11 +19,13 @@ class SignupForm(UserCreationForm):
 
         #ここで生のパスワードをハッシュ化した上で、モデルオブジェクトの属性にセットする。
         if CustomUser.objects.filter(username=username).exists():
+            #ユーザ登録情報更新の場合
             user = CustomUser.objects.filter(username=username)[0]
             fields_to_update = ("username","u_last_name","u_first_name","u_last_name_kana","u_first_name_kana","email","phone_number")
             [setattr(user, field, self.cleaned_data[field]) for field in fields_to_update]
             user.save()
         else:
+            #ユーザ新規作成の場合
             #ここで、ユーザーモデルのオブジェクト作成を行っている(ただし、保存をしない)
             user    = super().save(commit=False)
 
@@ -47,6 +50,11 @@ class SignupForm(UserCreationForm):
         else:
             print("質問者ユーザーではない")
             print(question_form.errors)
+            if QuestionUser.objects.filter(user=user.id):
+                quser = QuestionUser.objects.filter(user=user.id)[0]
+                fields_to_update = ("resident_area", "resident_style")
+                [setattr(quser, field, copied[field]) for field in fields_to_update]
+                quser.save()
 
         answer_form     = AnswerUserForm(copied)
 
@@ -55,6 +63,11 @@ class SignupForm(UserCreationForm):
             answer_form.save()
         else:
             print("回答者ユーザーではない")
+            if AnswerUser.objects.filter(user=user.id):
+                quser = AnswerUser.objects.filter(user=user.id)[0]
+                fields_to_update = ("company")
+                [setattr(quser, field, copied[field]) for field in fields_to_update]
+                quser.save()
             
         #ここでuserをreturnしなければアカウント新規作成ページから、ログイン後のページへ遷移しない
         #ログイン後のページに遷移するため、userのis_activeをチェックした上で遷移する。もし、userオブジェクトが返却されなければNoneが入る。分岐でNoneに対してis_activeは存在し得ない。故にエラーが出る。

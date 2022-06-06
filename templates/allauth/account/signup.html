@@ -14,7 +14,7 @@
 {#フォームの内容をpタグを使って表示するという書き方#}
 {{ form.as_p }}
 
-{% if request.GET.answer %}
+{% if request.GET.answer or request.POST.company %}
 <p>
   <input type="text" name="company" placeholder="所属会社" maxlength="200" required>
 </p>

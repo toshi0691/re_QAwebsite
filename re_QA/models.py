@@ -57,8 +57,8 @@ class AnswerUser(models.Model):
     company  = models.CharField(verbose_name="回答者の会社名",max_length=30)
     approval    = models.BooleanField(verbose_name="回答権利",default=False)
     
-    def __str__(self):
-        return self.company
+    # def __str__(self):
+    #     return self.company
     
     
 class AnswerUserProfile(models.Model):

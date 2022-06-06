@@ -22,7 +22,7 @@
             <input class="form-control" value={{ request.user.u_first_name_kana }} placeholder="メイ" type="text" name="u_first_name_kana">
             <input class="form-control" value={{ request.user.email }} placeholder="メールアドレス" type="text" name="email">
             <input class="form-control" value={{ request.user.phone_number }} placeholder="電話番号" type="text" name="phone_number">
-            {% if request.GET.answer %} 
+            {% if request.GET.answer or answer_user %} 
                 
                     <input type="text" name="company" value={% if answer_user %} {{ answer_user.company }} {% endif %} placeholder="所属会社" maxlength="200" required>
                 
