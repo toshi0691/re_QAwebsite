@@ -9,10 +9,10 @@ class AnswerUserAdmin(admin.ModelAdmin):
     list_editable   = ["approval"]
     
     def u_first_name(self,obj):
-        return obj.u.first_name
+        return obj.user.u_first_name
 
     def u_last_name(self,obj):
-        return obj.u.last_name
+        return obj.user.u_last_name
 
 
 

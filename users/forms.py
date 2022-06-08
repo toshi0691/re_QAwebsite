@@ -42,30 +42,35 @@ class SignupForm(UserCreationForm):
         copied["user"]  = user.id
         
         question_form   = QuestionUserForm(copied)
-
+        qa_user_identified = False
         #バリデーションOKになるには、userとseriousnessがモデルで定義したルールに則っていればよい。それ以外に余計なものが入っていたとしてもNGにはならない(除外されるだけ)
         if question_form.is_valid():
             print("質問者ユーザー登録")
             question_form.save()
         else:
-            print("質問者ユーザーではない")
+            print("質問者ユーザーではないか、既に質問者ユーザが存在する")
             print(question_form.errors)
             if QuestionUser.objects.filter(user=user.id):
                 quser = QuestionUser.objects.filter(user=user.id)[0]
                 fields_to_update = ("resident_area", "resident_style")
                 [setattr(quser, field, copied[field]) for field in fields_to_update]
                 quser.save()
+                qa_user_identified = True
+
+
 
         answer_form     = AnswerUserForm(copied)
 
         if answer_form.is_valid():
             print("回答者ユーザー登録")
+            user.is_active = False
+
             answer_form.save()
         else:
-            print("回答者ユーザーではない")
-            if AnswerUser.objects.filter(user=user.id):
+            print("回答者ユーザーではないか、すでに回答者ユーザが存在する")
+            if not qa_user_identified and AnswerUser.objects.filter(user=user.id):
                 quser = AnswerUser.objects.filter(user=user.id)[0]
-                fields_to_update = ("company")
+                fields_to_update = ("company",)
                 [setattr(quser, field, copied[field]) for field in fields_to_update]
                 quser.save()
             

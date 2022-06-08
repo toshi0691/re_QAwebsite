@@ -33,28 +33,6 @@
             <input class="form-control" type="submit" value="送信">
         </form>
 
-        <div class="border">
-
-
-
-            <div>姓</div>
-
-            <div>{{ request.user.u_last_name }}</div>
-            <div>名</div>
-            <div>{{ request.user.u_first_name }}</div>
-            <div>セイ</div>
-            <div>{{ request.user.u_last_name_kana }}</div>
-            <div>メイ</div>
-            <div>{{ request.user.u_first_name_kana }}</div>
-            <div>メールアドレス</div>
-            <div>{{ request.user.email }}</div>
-            <div>電話番号</div>
-            <div>{{ request.user.phone_number }}</div>
-            {% if request.GET.answer %}
-            {% else %}
-            {% endif %}
-        </div>
-
     </main>
 </body>
 </html>
