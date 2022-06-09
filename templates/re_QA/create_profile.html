@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>簡易掲示板</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 're_QA/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 're_QA/css/index.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!--日本語化用JS-->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+    <script src="{% static 're_QA/js/script.js' %}"></script>
+</head>
+<body>
+
+
+{% comment %} <form class="create_profile" id="create_profile_form" method="post" action="{% url 're_QA:create_profile' %}">
+  {% csrf_token %} {% endcomment %}
+{#フォームの内容をpタグを使って表示するという書き方#}
+<form method="POST">
+{% csrf_token %}
+    <div>
+        <textarea class="form-control" name="nickname"></textarea>
+    </div>
+    <input type="submit" value="作成">
+</form>
+
+{% comment %} </form> {% endcomment %}
+
+
+</body>
+</html>

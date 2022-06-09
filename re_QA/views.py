@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
-from .models import Topic,AnswerUser,QuestionUser
-from .forms import AnswerUserForm, TopicForm
+from .models import Topic,AnswerUser,QuestionUser,AnswerUserProfile
+from .forms import AnswerUserForm, TopicForm, AnswerUserProfileForm
 from users.forms import SignupForm, UpdateForm
 from users.models import CustomUser
 from .models import PhotoList,DocumentList,TopicReply
@@ -152,7 +152,7 @@ class UpdateQuestionUserView(View):
 
 
         user    = CustomUser.objects.filter(id=request.user.id).first()
-        form    = UpdateForm(request.POST,instance=user)
+        form    = UpdateForm(request.POST, instance=user)
         # user_inf_a  = AnswerUser.objects.filter(user=request.user.id).first()
         # form_a  = AnswerUserForm(request.POST,instance=user_inf_a)
         # user_inf_b  = QuestionUser.objects.filter(user=request.user.id).first()
@@ -184,6 +184,88 @@ class UpdateQuestionUserView(View):
 update_question_user   = UpdateQuestionUserView.as_view()
 
 
+
+class CreateProfileView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated :
+            print("未認証")
+            return redirect("account_login")
+        
+        context = {}
+
+        context["users"]         = AnswerUserProfile.objects.all()
+        
+        return render(request,"re_QA/create_profile.html",context)
+    
+    def post(self, request, *args, **kwargs):
+    
+    
+        copied          = request.POST.copy()
+        copied["user"]  = request.user.id
+        form    = AnswerUserProfileForm(copied)
+        
+        
+        if form.is_valid():
+            print("バリデーションOK")
+            
+            #保存する
+            form.save()
+        else:
+            print("バリデーションNG")
+
+            #バリデーションNGの理由を表示させる
+            print(form.errors)
+
+        return redirect("re_QA:create_profile")
+    
+#urls.pyから呼び出せるようにするために.as_view()を使う
+#クライアントがトップページにアクセスしたときは、GETされているので、Index.Viewのなかではget時はindex.htmlをレンダリングするのでindex.html
+create_profile   = CreateProfileView.as_view()
+
+
+
+class UpdateProfileView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            print("未認証")
+            return redirect("account_login")
+
+        context = {}
+
+        context["users"]         = CustomUser.objects.all()
+        context["answer_user"]   = AnswerUser.objects.filter(user=request.user.id).first()
+        context["question_user"] = QuestionUser.objects.filter(user=request.user.id).first()
+
+        print(context["question_user"])
+
+
+        return render(request,"re_QA/update_profile.html",context)
+
+    def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            print("未認証")
+            return redirect("account_login")
+
+        user    = CustomUser.objects.filter(id=request.user.id).first()
+        form    = AnswerUserProfileForm(request.POST, instance=user)
+        # user_inf_a  = AnswerUser.objects.filter(user=request.user.id).first()
+        # form_a  = AnswerUserForm(request.POST,instance=user_inf_a)
+        # user_inf_b  = QuestionUser.objects.filter(user=request.user.id).first()
+        # form_b  = QuestionUserForm(request.POST,instance=user_inf_b)
+
+        if form.is_valid():
+            print("バリデーションOK")
+            form.save(request)
+        else:
+            print("バリデーションNG")
+            print(form.errors)
+
+        return redirect("re_QA:update_profile")
 #関数ベースのビュー
 '''
 def index(request):
@@ -263,4 +345,17 @@ def mail_confirm(self, request):
     if not EmailAddress.objects.filter(user=request.user.id, verified=True):
         return redirect("account_email_verification_sent") 
 
-
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        # return redirect('home')
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')

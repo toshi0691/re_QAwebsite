@@ -62,7 +62,8 @@ class AnswerUser(models.Model):
     
     
 class AnswerUserProfile(models.Model):
-    user        = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
     
 
 

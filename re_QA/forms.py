@@ -1,5 +1,5 @@
 from django import forms 
-from .models import Topic,TopicReply,QuestionUser,AnswerUser
+from .models import Topic,TopicReply,QuestionUser,AnswerUser,AnswerUserProfile
 from .models import PhotoList,DocumentList
 
 class TopicForm(forms.ModelForm):
@@ -27,6 +27,12 @@ class AnswerUserForm(forms.ModelForm):
     class Meta:
         model   = AnswerUser
         fields  = [ "user","company" ]
+        
+class AnswerUserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model   = AnswerUserProfile
+        fields  = [ "user", "nickname" ]
 
 class PhotoListForm(forms.ModelForm):
 

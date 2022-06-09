@@ -63,8 +63,8 @@ class SignupForm(UserCreationForm):
 
         if answer_form.is_valid():
             print("回答者ユーザー登録")
-            user.is_active = False
-
+            #user.is_active = False
+           
             answer_form.save()
         else:
             print("回答者ユーザーではないか、すでに回答者ユーザが存在する")
