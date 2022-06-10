@@ -17,7 +17,19 @@ ALLOWED_MIME    = [ "application/pdf" ]
 class IndexView(View):
 
     def get(self, request, *args, **kwargs):
+        from allauth.account.models import EmailAddress
 
+        try:
+            email = request.user.email
+            if EmailAddress.objects.filter(email=email, verified=True).exists() is False:
+                return redirect('accounts/confirm-email/')
+            
+            if not request.user.has_perm('users.is_activated'):
+                return redirect('not_activated/')
+            
+        except AttributeError as _:
+            #AnonymousUserは除外
+            pass
         topics  = Topic.objects.all()
         context = { "topics":topics }
         
@@ -299,8 +311,10 @@ document    = DocumentView.as_view()
 
 #############################メール認証のURLをクリックした後に会員登録が完了する###########################
 
-def mail_confirm(self, request):
+def mail_confirm(request):
     if not EmailAddress.objects.filter(user=request.user.id, verified=True):
         return redirect("account_email_verification_sent") 
 
-
+def not_activated(request):
+    from django.http import HttpResponse
+    return HttpResponse("Not activated.")

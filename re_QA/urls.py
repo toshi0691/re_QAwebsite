@@ -10,4 +10,5 @@ urlpatterns = [
     path("document/",views.document, name="document"),
     path("update_question_user/",views.UpdateQuestionUserView.as_view(), name="update_question_user"),
     path("update_profile/",views.UpdateProfileView.as_view(), name="update_profile"),
+    path("not_activated/", views.not_activated, name='not_activated'),
 ]

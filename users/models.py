@@ -68,7 +68,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name        = _('user')
         verbose_name_plural = _('users')
         #abstract            = True         #←ここをコメントアウトしないとカスタムユーザーモデルは反映されず、マイグレーションエラーを起こす。
-
+        permissions = (("is_activated", "User is activated"),)
+        
     def clean(self):
         super().clean()
         self.email  = self.__class__.objects.normalize_email(self.email)
