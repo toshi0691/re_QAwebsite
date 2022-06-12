@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>プロフィール変更</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+    <main class="container">
+
+        <form action="{% url 're_QA:update_profile' %}" method="POST">
+            {% csrf_token %}
+            <input class="form-control" value="{{ request.answer_user_profile.nickname }}" placeholder="ペンネーム" type="text" name="nickname">
+            <input class="form-control" type="submit" value="送信">
+        </form>
+
+        <div class="border">
+            <div>ペンネーム</div>
+            <div>{{ request.answer_user.nickname }}</div>
+        </div>
+
+    </main>
+</body>
+</html>

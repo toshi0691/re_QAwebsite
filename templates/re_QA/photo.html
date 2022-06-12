@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>画像アップロードのテスト</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+    <h1 class="bg-primary text-center text-white">画像アップロードのテスト</h1>
+
+    <main class="container">
+
+        <p><a href="{% url 're_QA:document' %}">ファイルのアップロードはこちら</a></p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="photo">
+            <input class="form-control" type="submit" value="送信">
+        </form>
+
+        {% for content in data %}
+        <div class="my-2">
+            <img class="img-fluid" src="{{ content.photo.url }}" alt="投稿された画像">
+        </div>
+        {% endfor %}
+
+    </main>
+
+</body>
+</html>

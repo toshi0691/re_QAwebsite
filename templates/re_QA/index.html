@@ -7,13 +7,68 @@
     <title>簡易掲示板</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 're_QA/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 're_QA/css/index.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!--日本語化用JS-->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+    <script src="{% static 're_QA/js/script.js' %}"></script>
 </head>
 <body>
+    <header>
+        <h1>不動産質問サイト</h1>
+        <a href="{% url 'account_signup' %}?answer=true">回答者の会員登録</a>
+        <a href="{% url 'account_signup' %}">質問者の会員登録</a>
+        
+        <h1><a href="{% url 're_QA:index' %}">TOP</a></h1>
+        {% if request.user.is_authenticated %}
+            <div>{{ request.user.u_first_name }} さん</div>
+            <a href="{% url 'account_logout' %}">ログアウト</a>
+            <a href="{% url 're_QA:update_question_user' %}">会員登録情報変更ページ</a>
+            <a href="{% url 're_QA:create_profile' %}">プロフィール作成ページ</a>
 
+        {% else %}
+            <a href="{% url 'account_login' %}">新規会員登録・ログイン</a>
+        {% endif %}
+        <nav id="gnav">
+            <ul class="inner">
+                <li><a href="/">TOP</a></li>
+                <li><a href="/questions">質問一覧</a></li>
+                <li><a href="/answerers">回答者一覧</a></li>
+            </ul>
+        </nav>
+    </header>
+    
     <main class="container">
         {# ここが投稿用フォーム #}
         <form method="POST">
             {% csrf_token %}
+            <div>
+                <label for="mail">ジャンル</label>
+                <select name="genre" size="1" required>
+                    <option value="">ジャンルを選択</option>
+                    <option value="マンション売買">マンション売買</option>
+                    <option value="戸建て売買">戸建て売買</option>
+                    <option value="土地売買">土地売買</option>
+                    <option value="マンション賃貸">マンション賃貸</option>
+                    <option value="戸建て賃貸">戸建て賃貸</option>
+                    <option value="マンション投資">マンション投資</option>
+                    <option value="不動産相続">不動産相続</option>
+                    <option value="税金">税金</option>
+                    <option value="リフォーム">リフォーム</option>
+                    <option value="融資">融資</option>
+                    <option value="管理">管理</option>
+                </select>
+            </div>
+            <!--
+            <div>質問受付期限
+                
+                    <input name="deadline" id="date" type="text" readonly>
+                    <input name="deadline" id="time" type="text" readonly>
+                    <input name="deadline" id="dt" type="text" readonly>
+            </div>
+            -->
             <textarea class="form-control" name="comment"></textarea>
             <input type="submit" value="送信">
         </form>
@@ -22,10 +77,19 @@
         {% for topic in topics %}
         <div class="topic">
             <div>{{ topic.dt }}</div>
+            <div>{{ topic.genre }}</div>
+            <div>名前：{{ topic.name }}</div>
             <div>{{ topic.comment }}</div>
+
+            <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">返信</a>
         </div>
         {% endfor %}
-
+        {% comment %} <h2 class='regibutton'>
+            <a href = "/photo">
+                <button type = "button">フォト</button>
+            </a>
+        </h2> {% endcomment %}
     </main>
+    <footer></footer>
 </body>
 </html>
