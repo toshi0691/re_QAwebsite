@@ -67,6 +67,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name        = _('user')
         verbose_name_plural = _('users')
+        permissions = (("is_activated", "User is activated"),)
         #abstract            = True         #←ここをコメントアウトしないとカスタムユーザーモデルは反映されず、マイグレーションエラーを起こす。
 
     def clean(self):
