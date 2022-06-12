@@ -66,6 +66,10 @@ class AnswerUserProfile(models.Model):
     nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
 
 
+class ValidationCode(models.Model):
+    code = models.CharField(verbose_name='登録用コード', max_length=30)
+    purpose = models.CharField(verbose_name='使用目的', max_length=30)
+    source = models.CharField(verbose_name='紹介方法', max_length=30)
 
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Topic,TopicReply, QuestionUser,AnswerUser,AnswerUserProfile
+from .models import Topic,TopicReply, QuestionUser,AnswerUser,AnswerUserProfile,ValidationCode
 
 # Register your models here.
 
@@ -22,3 +22,4 @@ admin.site.register(AnswerUser,AnswerUserAdmin)
 admin.site.register(AnswerUserProfile)
 admin.site.register(Topic)
 admin.site.register(TopicReply)
+admin.site.register(ValidationCode)
