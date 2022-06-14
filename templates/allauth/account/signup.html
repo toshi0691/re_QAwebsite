@@ -12,7 +12,92 @@
 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
 {#フォームの内容をpタグを使って表示するという書き方#}
-{{ form.as_p }}
+<p>
+  <label for="id_username">ユーザー名:</label>
+  <input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required id="id_username">
+  
+    <span class="helptext">この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。</span>
+  
+  
+</p>
+
+
+<p>
+  <label for="id_u_last_name">姓:</label>
+  <input type="text" name="u_last_name" maxlength="20" required id="id_u_last_name">
+  
+  
+</p>
+
+
+<p>
+  <label for="id_u_first_name">名:</label>
+  <input type="text" name="u_first_name" maxlength="20" required id="id_u_first_name">
+  
+  
+</p>
+
+
+<p>
+  <label for="id_u_last_name_kana">セイ:</label>
+  <input type="text" name="u_last_name_kana" maxlength="30" required id="id_u_last_name_kana">
+  
+  
+</p>
+
+
+<p>
+  <label for="id_u_first_name_kana">メイ:</label>
+  <input type="text" name="u_first_name_kana" maxlength="30" required id="id_u_first_name_kana">
+  
+  
+</p>
+
+
+<p>
+  <label for="id_email">メールアドレス:</label>
+  <input type="email" name="email" maxlength="254" required id="id_email">
+  
+  
+</p>
+
+
+<p>
+  <label for="id_phone_number">電話番号:</label>
+  <input type="text" name="phone_number" maxlength="11" required id="id_phone_number">
+  
+  
+</p>
+
+{% if request.GET.answer or request.POST.company %}
+<p>
+  <label for="id_source">紹介方法:</label>
+  <input type="text" name="source" maxlength="30" id="id_source">
+  
+  
+</p>
+{% endif %}
+
+<p>
+  <label for="id_password1">パスワード:</label>
+  <input type="password" name="password1" autocomplete="new-password" required id="id_password1">
+  
+    <span class="helptext"><ul><li>あなたの他の個人情報と似ているパスワードにはできません。</li><li>パスワードは最低 8 文字以上必要です。</li><li>よく使われるパスワードにはできません。</li><li>数字だけのパスワードにはできません。</li></ul></span>
+  
+  
+</p>
+
+
+<p>
+  <label for="id_password2">パスワード(確認用):</label>
+  <input type="password" name="password2" autocomplete="new-password" required id="id_password2">
+  
+    <span class="helptext">確認のため、再度パスワードを入力してください。</span>
+  
+  
+    
+  
+</p>
 
 {% if request.GET.answer or request.POST.company %}
 <p>
