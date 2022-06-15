@@ -12,4 +12,5 @@ urlpatterns = [
     path("update_profile/",views.UpdateProfileView.as_view(), name="update_profile"),
     path("create_profile/",views.create_profile, name="create_profile"),
     path("not_activated/", views.not_activated, name='not_activated'),
+    # path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',views.activate, name="activate"),
 ]

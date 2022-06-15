@@ -11,21 +11,85 @@
 
 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
+  {{ form.non_field_errors }}
+  <p>
+    <label for="id_username">ユーザー名:</label>
+    <input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required id="id_username">
+      <span class="helptext">この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。</span>
+      {{ form.username.errors }} 
+    </p>
+  <p>
+    <label for="id_u_last_name">姓:</label>
+    <input type="text" name="u_last_name" maxlength="20" required id="id_u_last_name">
+    {{ form.u_last_name.errors }}
+  </p>
+  <p>
+    <label for="id_u_first_name">名:</label>
+    <input type="text" name="u_first_name" maxlength="20" required id="id_u_first_name">
+    {{ form.u_first_name.errors }}
+  </p>
+  <p>
+    <label for="id_u_last_name_kana">セイ:</label>
+    <input type="text" name="u_last_name_kana" maxlength="30" required id="id_u_last_name_kana">
+    {{ form.u_last_name_kana.errors }}
+  </p>
+  <p>
+    <label for="id_u_first_name_kana">メイ:</label>
+    <input type="text" name="u_first_name_kana" maxlength="30" required id="id_u_first_name_kana">
+    {{ form.u_first_name_kana.errors }}
+  </p>
+  <p>
+    <label for="id_email">メールアドレス:</label>
+    <input type="email" name="email" maxlength="254" required id="id_email">
+    {{ form.email.errors }}
+  </p>
+  <p>
+    <label for="id_phone_number">電話番号:</label>
+    <input type="text" name="phone_number" maxlength="11" required id="id_phone_number">
+    {{ form.phone_number.errors }}
+  </p>
+  {% if request.GET.answer or request.POST.company %}
+  <p>
+    <input type="text" name="company" placeholder="所属会社" maxlength="200" required>
+  </p>
+  {{ form.company.errors }}
+  {% else %}
+  <p>
+    <input type="text" name="resident_area" placeholder="居住エリア" maxlength="200" required>
+  </p>
+  {{ form.resient_area.errors }}
+  <p>
+    <input type="text" name="resident_style" placeholder="居住スタイル" maxlength="200" required>
+  </p>
+  {{ form.resident_style.errors }}
+  {% endif %}
+  {% if request.GET.answer or request.POST.company %}
+  <p>
+    <label for="id_source">紹介方法:</label>
+    <input type="text" name="source" maxlength="30" id="id_source">
+  </p>
+  {{ form.source.errors }}
+  {% endif %}
+  
+  <p>
+    <label for="id_password1">パスワード:</label>
+    <input type="password" name="password1" autocomplete="new-password" required id="id_password1">
+  
+      <span class="helptext"><ul><li>あなたの他の個人情報と似ているパスワードにはできません。</li><li>パスワードは最低 8 文字以上必要です。</li><li>よく使われるパスワードにはできません。</li><li>数字だけのパスワードにはできません。</li></ul></span>
+  </p>
+  {{ form.password1.errors }}
+  <p>
+    <label for="id_password2">パスワード(確認用):</label>
+    <input type="password" name="password2" autocomplete="new-password" required id="id_password2">
+  
+      <span class="helptext">確認のため、再度パスワードを入力してください。</span>
+  </p>
+  {{ form.password2.errors }}
 {#フォームの内容をpタグを使って表示するという書き方#}
-{{ form.as_p }}
+{% comment %} 
+{{ form.as_p }} {% endcomment %}
 
-{% if request.GET.answer or request.POST.company %}
-<p>
-  <input type="text" name="company" placeholder="所属会社" maxlength="200" required>
-</p>
-{% else %}
-<p>
-  <input type="text" name="resident_area" placeholder="居住エリア" maxlength="200" required>
-</p>
-<p>
-  <input type="text" name="resident_style" placeholder="居住スタイル" maxlength="200" required>
-</p>
-{% endif %}
+
 
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />

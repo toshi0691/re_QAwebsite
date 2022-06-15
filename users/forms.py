@@ -1,13 +1,28 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from re_QA.forms import QuestionUserForm,AnswerUserForm
-from re_QA.models import QuestionUser,AnswerUser
+from re_QA.models import QuestionUser,AnswerUser, ValidationCode
+from django.core.exceptions import ValidationError
 
 class SignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model   = CustomUser
-        fields  = ("username","u_last_name","u_first_name","u_last_name_kana","u_first_name_kana","email","phone_number")
+        fields  = ("username","u_last_name","u_first_name","u_last_name_kana","u_first_name_kana","email","phone_number","source")
         #
+
+    def clean_source(self):
+        # 質問者の場合は登録コードのバリデーションはしない
+        if 'company' not in self.cleaned_data:
+            return self.cleaned_data['source']
+
+        code = self.cleaned_data['source']
+        code_source_map ={x.code:x.source for x in ValidationCode.objects.all()}
+        if code not in code_source_map.keys():
+            raise ValidationError("登録コードが間違っています")
+
+        # Always return a value to use as the new cleaned data, even if
+        # this method didn't change it.
+        return code_source_map[code]
 
     #TODO:ここで追加のフォームの保存もするため、requestを引数として受ける。argsで受け取っても良いが混乱するので。
     def save(self, request, commit=True, *args, **kwargs):

@@ -18,8 +18,6 @@ class IndexView(View):
 
     def get(self, request, *args, **kwargs):
 
-        
-
         try:
             email = request.user.email
             if EmailAddress.objects.filter(email=email, verified=True).exists() is False:
@@ -359,6 +357,21 @@ def mail_confirm(request):
     if not EmailAddress.objects.filter(user=request.user.id, verified=True):
         return redirect("account_email_verification_sent") 
 
+# def activate(request, uidb64, token):
+#     try:
+#         uid = force_text(urlsafe_base64_decode(uidb64))
+#         user = User.objects.get(pk=uid)
+#     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+#         user = None
+#     if user is not None and account_activation_token.check_token(user, token):
+#         user.is_active = True
+#         user.save()
+#         login(request, user)
+#         # return redirect('home')
+#         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+#     else:
+#         return HttpResponse('Activation link is invalid!')
+    
 def not_activated(request):
     from django.http import HttpResponse
     return HttpResponse("Not activated.")

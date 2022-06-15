@@ -16,6 +16,7 @@
     <script src="{% static 're_QA/js/script.js' %}"></script>
 </head>
 <body>
+    
     <header>
         <h1>不動産質問サイト</h1>
         <a href="{% url 'account_signup' %}?answer=true">回答者の会員登録</a>
@@ -26,7 +27,10 @@
             <div>{{ request.user.u_first_name }} さん</div>
             <a href="{% url 'account_logout' %}">ログアウト</a>
             <a href="{% url 're_QA:update_question_user' %}">会員登録情報変更ページ</a>
-            <a href="{% url 're_QA:create_profile' %}">プロフィール作成ページ</a>
+            {% if request.user.company %}
+                <a href="{% url 're_QA:create_profile' %}">プロフィール作成ページ</a>
+            {% endif %}
+            
 
         {% else %}
             <a href="{% url 'account_login' %}">新規会員登録・ログイン</a>
@@ -43,7 +47,12 @@
     <main class="container">
         {# ここが投稿用フォーム #}
         <form method="POST">
-            {% csrf_token %}
+            {% comment %} {% csrf_token %}
+            {% if request.user.is_authenticated %}
+                <div class="name"> {{ request.user.username }} </div>
+            {% else %}
+            <div class="name" value="匿名" name="">名前：匿名</div>
+            {% endif %} {% endcomment %}
             <div>
                 <label for="mail">ジャンル</label>
                 <select name="genre" size="1" required>

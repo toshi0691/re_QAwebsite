@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="jpn">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,21 +11,42 @@
     <title>不動産質問サイト</title>
 </head>
 <body>
-    <header style="text-align:center">
-        <h1>不動産質問サイト</h1>
-        <h2 class='regibutton'>
-            <a href = "/choose_membership_type">
-                <button type = "button">会員登録</button>
-            </a>
-        </h2>
-        <nav id="gnav">
-            <ul class="inner">
-                <li><a href="/">TOP</a></li>
-                <li><a href="/questions">質問一覧</a></li>
-                <li><a href="/answerers">回答者一覧</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="navbar">
+            <h1>不動産質問サイト</h1>
+            <nav class="navlinks">
+                
+                    <h6><a href="/">TOP</a></h6>
+                    <h6><a href="/questions">質問一覧</a></h6>
+                    <h6><a href="/answerers">回答者一覧</a></h6>
+                
+            </nav>
+            <div class="login" style="font-size: 15px;">
+                {% if request.user.is_authenticated %}
+                    <div>{{ request.user.u_first_name }} さん</div>
+                    <p><a href="{% url 'account_logout' %}">ログアウト</a></p>
+                    <p><a href="{% url 're_QA:update_question_user' %}">会員登録情報変更ページ</a></p>
+                    <p><a href="{% url 're_QA:create_profile' %}">プロフィール作成ページ</a></p>
+                {% else %}
+                    <p><a href="{% url 'account_login' %}">新規会員登録・ログイン</a></p>
+                {% endif %}
+            </div>
+    </div>
+    <div class="content">
+        <table style="width: 100%;border-spacing: 0px;min-height: 100%;">
+            <tr>
+        <td style="width:100%; float: left;">
+            <div class="heading">
+                <div class="tab">
+                    <p>All Questions</p>	
+                </div>
+            </div>
+
+        <div class="welcome">
+            <div class="tab">
+                <a href="{% url 're_QA:questions' %}" style="color: #8c97b4;"><p class="{{ questions }}" style="display:inline-block;">Latest</p></a>
+                <a href="{% url "re_QA:index" %}" style="color: #8c97b4;"><p class="{{ index }}" style="display: inline-block;">Views</p></a>
+            </div>
+        </div>
         {% for topic in topics %}
             <!--<div class="topic">
                 <div>{{ topic.dt }}</div>
@@ -36,20 +57,24 @@
                 <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">返信</a>
             </div>
         -->
-            <div class="q-first">
-                <h1 class="q-head">{{ topic.dt }}</h1>
-                <h2 class="q-head">{{ topic.genre }}</h2>
-                <h3 class="q-head">名前：{{ topic.name }}</h3>
-                <div class="q-detail">
-                    <h2 class="q-head" >質問内容</h2>
-                    <div class="q-detail">
-                        {{ topic.comment }}
-                    </div>
+            <div class="question">
+                <div class="left">
+                    <h6 style="font-size: 16px;" class="ques"><strong>
+                        <h1 class="q-head">{{ topic.dt }}</h1>
+                        <h2 class="q-head">{{ topic.genre }}</h2>
+                        <h3 class="q-head">名前：{{ topic.name }}</h3>
+                        <div class="q-detail">
+                            <h2 class="q-head" >質問内容</h2>
+                            <div class="q-detail">
+                                {{ topic.comment }}
+                            </div>
+                        </div>
+                    </strong></h6>
+                        <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">詳細</a>
                 </div>
-                
-                <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">詳細</a>
             </div>
-            <hr>
-        {% endfor %}    
+        
+        {% endfor %} 
+    </div>   
 </body>
 </html>

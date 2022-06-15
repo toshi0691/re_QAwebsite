@@ -1,3 +1,132 @@
+body {
+	min-width: 1300px;
+	margin: 0px;
+	font-family: sans-serif;
+}
+
+.navbar {
+	width: 100%;
+	background-color: #2f364a;
+	height:80px;
+}
+
+.navlinks {
+	float: left;
+	width:30%;
+	background-color: #19202e;
+	height:100%;
+}
+
+.navlinks h6 {
+	margin-top:27px;
+	float: left;
+	width:16%;
+	text-align: center;
+	margin-left: 0.3%;
+}
+
+.navlinks h6 a {
+	text-decoration: none;
+	color: #6f7992;
+	font-weight: normal;
+	font-size:15px; 
+}
+.login {
+	float: left;
+	height: 100%;
+	width: 17.7%;
+	text-align: center;
+}
+
+.login p {
+	margin-top: 30px;
+}
+
+.login a {
+	text-decoration: none;
+	color: #169ef2;
+}
+
+.login a:hover {
+	color: #1f73ad;
+}
+.main {
+	width: 100%;
+}
+.content {
+	float: left;
+	width: 83.2%;
+	border-right-style: solid;
+	border-right-color: #dadfea;
+	border-right-width: 1px;
+	border-left-style: solid;
+	border-left-color: #dadfea;
+	border-left-width: 1px;
+	height: auto;
+
+}
+.question {
+	border-bottom-style: solid;
+	border-bottom-color: #dadfea;
+	border-bottom-width: 1px;
+	padding-left: 4%;
+	padding-top: 7px;
+	height: 150px;
+	padding-bottom: 20px;
+}
+.ques {
+	margin-top: 20px;
+	margin-bottom: 0px;
+}
+.heading {
+	padding-left: 2.5%;
+	font-size: 22px;
+	border-bottom-style: solid;
+	border-bottom-color: #dadfea;
+	border-bottom-width: 1px;
+	margin-bottom: -1px;
+}
+
+.welcome {
+	padding-left: 2.5%;
+	font-size: 14px;
+	border-bottom-style: solid;
+	border-bottom-color: #dadfea;
+	border-bottom-width: 1px;
+}
+
+.welcome p {
+	width: 10%;
+	text-align: center;
+	margin-bottom: 0px;
+	padding-bottom: 11px;
+	cursor: pointer;
+	margin-top: 0px;
+	padding-top: 13px;
+}
+/* ↓反映されないから質問する */
+.tab .active {
+	border-bottom-style: solid;
+	border-bottom-color: #f39c12;
+	border-bottom-width: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .q-card > .q-first{
     width: 100%;
     max-width:500px;

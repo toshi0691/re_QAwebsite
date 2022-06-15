@@ -38,7 +38,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number       = models.CharField(verbose_name='電話番号',
                                         validators=[RegexValidator(r'^0[0-9]{9,10}$', '正しい電話番号を入力して下さい')
                                                     ],max_length=11)
-    
+    source = models.CharField(verbose_name='紹介方法', max_length=30, blank=True)
 
 ######################################################
 
