@@ -85,6 +85,26 @@ class QuestionsView(View):
 questions    = QuestionsView.as_view()
 
 
+
+class QuestionsAnonymousView(View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        topics  = Topic.objects.all()
+        context = { "topics":topics }
+        
+        return render(request,"re_QA/questions_anonyomous.html",context)
+        
+    def post(self, request, pk, *args, **kwargs):
+            
+        #if 'sort_own' in request.POST:
+            #自分の質問のみを集めてリダイレクトするメソッド
+            
+            
+        return redirect("re_QA:single",pk)
+      
+questions_anonymous    = QuestionsAnonymousView.as_view()
+
 ###################################個別ページを表示するビュー###################################
    
 class SingleView(View):
