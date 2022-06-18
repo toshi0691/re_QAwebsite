@@ -46,6 +46,7 @@ class QuestionUser(models.Model):
     user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
     resident_area = models.CharField(verbose_name="質問者の居住エリア",max_length=30)
     resident_style = models.CharField(verbose_name="質問者の居住スタイル",max_length=30)
+    email_notification = models.BooleanField(default=False)
     
     #(https://stackoverflow.com/questions/39883950/str-returned-non-string-type-tuple)
     # def __str__(self):
