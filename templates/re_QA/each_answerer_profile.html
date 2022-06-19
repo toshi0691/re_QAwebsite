@@ -26,11 +26,21 @@
             </ul>
         </nav>
     </header>
-        {% for profile in profiles %}
-            <div class="q-first">
-                <h1 class="q-head">{{ profile.nickname }}</h1>
+        {% comment %} {% for profile in profiles %} {% endcomment %}
+            <!--<div class="topic">
+                <div>{{ topic.dt }}</div>
+                <div>{{ topic.genre }}</div>
+                <div>名前：{{ topic.name }}</div>
+                <div>{{ topic.comment }}</div>
+    
+                <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">返信</a>
             </div>
-            <a href="{% url 're_QA:each_answerer_profile' profile.user.id  %}">表示する</a>
-        {% endfor %}    
+        -->
+            <div class="q-first">
+                <h1 class="q-head">{{ answerer.nickname }}</h1>
+                
+            </div>
+            <hr>
+        {% comment %} {% e    ndfor %} {% endcomment %}
 </body>
 </html>

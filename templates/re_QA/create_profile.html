@@ -24,7 +24,8 @@
 <form method="POST">
 {% csrf_token %}
     <div>
-        <textarea class="form-control" name="nickname"></textarea>
+        <label for="id_for_nickname">ニックネーム：</label>
+        <input class="form-control" name="nickname"></input>
     </div>
     <input type="submit" value="作成">
 </form>

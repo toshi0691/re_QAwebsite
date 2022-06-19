@@ -12,7 +12,8 @@ class SignupForm(UserCreationForm):
 
     def clean_source(self):
         # 質問者の場合は登録コードのバリデーションはしない
-        if 'company' not in self.cleaned_data:
+        # if 'company' not in self.cleaned_data:
+        if 'company' not in self.data:
             return self.cleaned_data['source']
 
         code = self.cleaned_data['source']

@@ -50,6 +50,7 @@
   </p>
   {% if request.GET.answer or request.POST.company %}
   <p>
+    <label for="id_company">会社名:</label>
     <input type="text" name="company" placeholder="所属会社" maxlength="200" required>
   </p>
   {{ form.company.errors }}

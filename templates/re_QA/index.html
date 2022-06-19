@@ -27,7 +27,7 @@
             <div>{{ request.user.u_first_name }} さん</div>
             <a href="{% url 'account_logout' %}">ログアウト</a>
             <a href="{% url 're_QA:update_question_user' %}">会員登録情報変更ページ</a>
-            {% if request.user.company %}
+            {% if request.user.answeruser %}
                 <a href="{% url 're_QA:create_profile' %}">プロフィール作成ページ</a>
             {% endif %}
             
@@ -47,6 +47,7 @@
     <main class="container">
         {# ここが投稿用フォーム #}
         <form method="POST">
+            {% csrf_token %}
             {% comment %} {% csrf_token %}
             {% if request.user.is_authenticated %}
                 <div class="name"> {{ request.user.username }} </div>

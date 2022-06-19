@@ -23,13 +23,14 @@ class IndexView(View):
             if EmailAddress.objects.filter(email=email, verified=True).exists() is False:
                 return redirect('accounts/confirm-email/')
 
-            if not request.user.has_perm('users.is_activated'):
-                return redirect('not_activated/')
+            # if not request.user.has_perm('users.is_activated'):
+            #     return redirect('not_activated/')
 
         except AttributeError as _:
             #AnonymousUserは除外
             pass
-
+        # if request.user.company
+        
         topics  = Topic.objects.all()
         context = { "topics":topics }
         
@@ -129,9 +130,45 @@ class SingleView(View):
 single   = SingleView.as_view()
 
 
-#########################################自分のした質問を一覧表示させるメソッド######################
+#########################################回答者一覧ページ######################
+class AnswerersView(View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        profiles  = AnswerUserProfile.objects.all()
+        context = { "profiles":profiles }
+        
+        return render(request,"re_QA/answerers.html",context)
+        
+    def post(self, request, pk, *args, **kwargs):
+            
+        #if 'sort_own' in request.POST:
+            #自分の質問のみを集めてリダイレクトするメソッド
+            
+            
+        return redirect("re_QA:each_answerer_profile",pk)
+      
+answerers    = AnswerersView.as_view()
+#########################################個々の回答者プロフィールページ########################################
+class EachAnswererProfileView(View):
+    
+    def get(self, request, pk, *args, **kwargs):
+        
+        #contextを辞書型にする
+        context = {}
+#Topicクラスのidがpkと一致する最初のオブジェクトに、"topic"というキーを割り当てる
+        context["answerer"]   = AnswerUserProfile.objects.filter(id=pk).first()
+        
+        if not context["answerer"]:
+            print("存在しないのでリダイレクト") 
+            return redirect("re_QA:index")
+        
+        return render(request,"re_QA/each_answerer_profile.html",context)
+        
+      
+each_answerer_profile    = EachAnswererProfileView.as_view()
 
-#########################################ユーザ会員登録ページ######################################
+#########################################ユーザ会員登録ページ#################################################
 
 #########################################質問ユーザ会員登録情報編集ページ######################################
 
@@ -357,21 +394,3 @@ def mail_confirm(request):
     if not EmailAddress.objects.filter(user=request.user.id, verified=True):
         return redirect("account_email_verification_sent") 
 
-# def activate(request, uidb64, token):
-#     try:
-#         uid = force_text(urlsafe_base64_decode(uidb64))
-#         user = User.objects.get(pk=uid)
-#     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-#         user = None
-#     if user is not None and account_activation_token.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         login(request, user)
-#         # return redirect('home')
-#         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-#     else:
-#         return HttpResponse('Activation link is invalid!')
-    
-def not_activated(request):
-    from django.http import HttpResponse
-    return HttpResponse("Not activated.")
