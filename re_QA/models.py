@@ -47,7 +47,8 @@ class QuestionUser(models.Model):
     resident_area = models.CharField(verbose_name="質問者の居住エリア",max_length=30)
     resident_style = models.CharField(verbose_name="質問者の居住スタイル",max_length=30)
     email_notification = models.BooleanField(default=False)
-
+    registration_time = models.DateTimeField(auto_now_add=True, blank=True)
+    
     #(https://stackoverflow.com/questions/39883950/str-returned-non-string-type-tuple)
     # def __str__(self):
     #     template = '{0.resident_area}{0.resident_style}'
@@ -60,7 +61,8 @@ class AnswerUser(models.Model):
     count_commented = models.IntegerField(default=0)
     count_good = models.IntegerField(default=0)
     count_bad = models.IntegerField(default=0)
-    
+    registration_time = models.DateTimeField(auto_now_add=True, blank=True)
+
     def __str__(self):
         return self.company
     
