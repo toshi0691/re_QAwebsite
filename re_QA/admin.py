@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import Topic,TopicReply, QuestionUser,AnswerUser,AnswerUserProfile,ValidationCode
-
+# from allauth.account.models import EmailAddress
 # Register your models here.
+
 
 
 class AnswerUserAdmin(admin.ModelAdmin):
@@ -22,4 +23,5 @@ admin.site.register(AnswerUser,AnswerUserAdmin)
 admin.site.register(AnswerUserProfile)
 admin.site.register(Topic)
 admin.site.register(TopicReply)
+# admin.site.register(EmailAddress)
 admin.site.register(ValidationCode)
