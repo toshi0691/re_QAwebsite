@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views import View
+from django.views import View,generic
 from .models import Topic,AnswerUser,QuestionUser,AnswerUserProfile
 from .forms import AnswerUserForm, TopicForm, AnswerUserProfileForm
 from users.forms import SignupForm, UpdateForm
@@ -8,7 +8,9 @@ from .models import PhotoList,DocumentList,TopicReply
 from .forms import PhotoListForm,DocumentListForm,TopicReplyForm #,RegisterUserForm
 from allauth.account.models import EmailAddress
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 import magic
+
 
 
 
@@ -35,6 +37,9 @@ class IndexView(View):
         context = { "topics":topics }
         
         return render(request,"re_QA/index.html",context)
+    
+    
+    
     
     def post(self, request, *args, **kwargs):
         """
@@ -74,6 +79,15 @@ class QuestionsView(View):
         context = { "topics":topics }
         
         return render(request,"re_QA/questions.html",context)
+    
+    # def get_queryset(self):
+    #     queryset = Topic.objects.order_by('-create_at')
+    #     keyword = self.request.GET.get('keyword')
+    #     if keyword :
+    #         queryset = queryset.filter(Q(genre__icontains = keyword)|(Q(comment__icontains = keyword)))
+    #         context = { "searched_topics": queryset }
+    #     return render("re_QA/searched_questions.html",context)
+    #     # return super().get_queryset()
         
     def post(self, request, pk, *args, **kwargs):
             
@@ -84,6 +98,23 @@ class QuestionsView(View):
         return redirect("re_QA:single",pk)
       
 questions    = QuestionsView.as_view()
+
+class SearchedQuestionsView(generic.ListView):
+    model = Topic
+    def get_queryset(self):
+            
+            keyword = self.request.GET.get('keyword')
+            if not keyword :
+                queryset = Topic.objects.none()
+                return queryset
+            queryset = Topic.objects.order_by('-dt')
+            queryset = queryset.filter(Q(genre__icontains = keyword)|(Q(comment__icontains = keyword)))
+            # context = { "searched_topics": queryset }
+            return queryset
+            
+    
+searched_questions    = SearchedQuestionsView.as_view()
+
 
 
 ###################################個別ページを表示するビュー###################################
@@ -115,8 +146,8 @@ class SingleView(View):
         copied          = request.POST.copy()
         copied["topic"] = pk
 
-
         form    = TopicReplyForm(copied)
+        
 
         if form.is_valid():
             print("バリデーションOK")
@@ -128,6 +159,7 @@ class SingleView(View):
         return redirect("re_QA:single",pk)
     
 single   = SingleView.as_view()
+
 
 
 #########################################回答者一覧ページ######################

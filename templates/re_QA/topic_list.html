@@ -10,10 +10,9 @@
     <link rel="stylesheet" href="{% static 're_QA/css/style.css' %}">
     <title>不動産質問サイト</title>
 </head>
-{% comment %} <form class="keyword_search_form" method="Get" action="">
+<form class="keyword_search_form" method="Get" action="">
 <input class="keyword_search_input" type="text" placeholder="Search" aria-label="Search" name="keyword">
-<button class="keyword_search_button" type="submit">検索</button> {% endcomment %}
-<p><a href="{% url 're_QA:searched_questions' %}">検索ページ</a></p>
+<button class="keyword_search_button" type="submit">検索</button>
 <body>
     <div class="navbar">
             <h1>不動産質問サイト</h1>
@@ -51,16 +50,8 @@
                 <a href="{% url "re_QA:index" %}" style="color: #8c97b4;"><p class="{{ index }}" style="display: inline-block;">Views</p></a>
             </div>
         </div>
-        {% for topic in topics %}
-            <!--<div class="topic">
-                <div>{{ topic.dt }}</div>
-                <div>{{ topic.genre }}</div>
-                <div>名前：{{ topic.name }}</div>
-                <div>{{ topic.comment }}</div>
-    
-                <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">返信</a>
-            </div>
-        -->
+        {% for topic in topic_list %}
+           
             <div class="question">
                 <div class="left">
                     <h6 style="font-size: 16px;" class="ques"><strong>

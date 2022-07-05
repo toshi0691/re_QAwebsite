@@ -13,6 +13,8 @@ urlpatterns = [
     path("create_profile/",views.create_profile, name="create_profile"),
     path("answerers/",views.answerers, name="answerers"),
     path("each_answerer_profile/<uuid:pk>",views.each_answerer_profile, name="each_answerer_profile"),
+    path('searched_questions/', views.searched_questions, name="searched_questions"),
+    
     # path("not_activated/", views.not_activated, name='not_activated'),
     # path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',views.activate, name="activate"),
 ]

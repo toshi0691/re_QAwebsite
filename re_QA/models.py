@@ -19,7 +19,7 @@ class Topic(models.Model):
         return timezone.now() + timezone.timedelta(days=7)
 
     deadline    = models.DateTimeField( verbose_name="回答受付期限", default=one_week )
-    
+
 
     def __str__(self):
         return self.comment
@@ -47,6 +47,7 @@ class QuestionUser(models.Model):
     resident_area = models.CharField(verbose_name="質問者の居住エリア",max_length=30)
     resident_style = models.CharField(verbose_name="質問者の居住スタイル",max_length=30)
     email_notification = models.BooleanField(default=False)
+    registration_time = models.DateTimeField(auto_now_add=True, blank=True)
     
     #(https://stackoverflow.com/questions/39883950/str-returned-non-string-type-tuple)
     # def __str__(self):
@@ -57,6 +58,10 @@ class AnswerUser(models.Model):
     user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
     company  = models.CharField(verbose_name="回答者の会社名",max_length=30)
     approval    = models.BooleanField(verbose_name="回答権利",default=False)
+    registration_time = models.DateTimeField(auto_now_add=True, blank=True)
+    count_commented = models.IntegerField(default=0)
+    count_good = models.IntegerField(default=0)
+    count_bad = models.IntegerField(default=0)
     
     # def __str__(self):
     #     return self.company
