@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.views import View,generic
 from .models import Topic,AnswerUser,QuestionUser,AnswerUserProfile
 from .forms import AnswerUserForm, TopicForm, AnswerUserProfileForm
@@ -9,6 +9,7 @@ from .forms import PhotoListForm,DocumentListForm,TopicReplyForm #,RegisterUserF
 from allauth.account.models import EmailAddress
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import magic
 
 
@@ -189,11 +190,72 @@ class EachAnswererProfileView(View):
         #contextを辞書型にする
         context = {}
 #Topicクラスのidがpkと一致する最初のオブジェクトに、"topic"というキーを割り当てる
-        context["answerer"]   = AnswerUserProfile.objects.filter(id=pk).first()
+###filterの中user=pkで合っている？id=pkだとエラーになるからそうしたが。##############
+        context["answerer"]   = AnswerUserProfile.objects.filter(user=pk).first()
         
         if not context["answerer"]:
             print("存在しないのでリダイレクト") 
             return redirect("re_QA:index")
+        
+    # def profile(request, id):
+        top = AnswerUserProfile.objects.all().order_by("-points")[:min(AnswerUserProfile.objects.count(),5)]
+        if request.user.is_authenticated:
+            profile = get_object_or_404(AnswerUserProfile,user=pk)
+            if profile.points < 100:
+                color = "#3498db"
+                rank = "Amateur"
+            elif profile.points < 1000:
+                color = "#1abc9c"
+                rank = "Trainee"
+            elif profile.points < 2000:
+                color = "gold"
+                rank = "Professor"
+            else:
+                color = "red"
+                rank = "Legend"
+        else:
+            profile = get_object_or_404(AnswerUserProfile,id=1)
+            val = ""
+            percent = 100
+
+        queryset_list=Topic.objects.all().filter(user=profile).order_by("-dt")
+        paginator = Paginator(queryset_list, 10)
+        page = request.GET.get('page')
+        username='Login'
+        if request.user.is_active:
+            username = request.user.username
+        try:
+            queryset = paginator.page(page)
+        except PageNotAnInteger:
+            queryset = paginator.page(1)
+        except EmptyPage:
+            queryset = paginator.page(paginator.num_pages)
+
+
+        queryset_list1=TopicReply.objects.all().filter(user=profile).order_by("-dt")
+        paginator1 = Paginator(queryset_list1, 10)
+        page1 = request.GET.get('page1')
+        username='Login'
+        if request.user.is_active:
+            username = request.user.username
+        try:
+            queryset1 = paginator1.page(page1)
+        except PageNotAnInteger:
+            queryset1 = paginator1.page(1)
+        except EmptyPage:
+            queryset1 = paginator1.page(paginator1.num_pages)
+
+
+        context={
+            "profile":profile,
+            "color":color,
+            "rank": rank,
+            "object_list":queryset,
+            "page":"page",
+            "object_list1":queryset1,
+            "page1":"page1","q":Topic.objects.count(),"a":TopicReply.objects.count(),"u":AnswerUserProfile.objects.count(),"top":top
+        }
+        # return render(request,"profile.html",context)
         
         return render(request,"re_QA/each_answerer_profile.html",context)
         

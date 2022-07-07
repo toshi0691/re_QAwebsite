@@ -26,20 +26,32 @@
             </ul>
         </nav>
     </header>
-        {% comment %} {% for profile in profiles %} {% endcomment %}
-            <!--<div class="topic">
-                <div>{{ topic.dt }}</div>
-                <div>{{ topic.genre }}</div>
-                <div>名前：{{ topic.name }}</div>
-                <div>{{ topic.comment }}</div>
-    
-                <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">返信</a>
-            </div>
-        -->
+        {% if request.user.is_authenticated %}
             <div class="q-first">
                 <h1 class="q-head">{{ answerer.nickname }}</h1>
                 
             </div>
+        </div>
+
+
+
+        <div class="rank">
+        <p style="background-color: {{ color }}; border:none;color: white">{{ rank }}</p>
+        <div style="display: inline-block;">
+            <p style="border:none;font-size: 35px;margin: 0px;color:#3498db">{{ profile.points }}</p>
+        </div><div style="display: inline-block;margin-left: 2%;">
+            <p style="border:none;font-size: 12px;margin: 0px;color:#3498db"><i class="fa fa-star" aria-hidden="true"></i></p>
+            <p style="border:none;font-size: 12px;margin: 0px;">Points</p>
+        </div></div>
+        <div style="display: inline-block;vertical-align: middle;">
+            <div class="circle" style="display: inline-block;"><h6 style="background-color: #3498db;color: white;border:none;">{{ profile.questions }}</h6><p>Questions</p></div>
+            <div class="circle" style="display: inline-block;"><h6 style="background-color: #1abc9c;color: white;border:none;">{{ profile.answers }}</h6><p>Answers</p></div>
+        </div>
+        {% endif %}
+        {% if request.user == profile.user %}
+            <p style="background-color: #3498db;font-size: 15px;" class="button"><a href="{% url "profile_update" id=profile.id %}"><i class="fa fa-pencil" aria-hidden="true"></i> Update</a></p>
+        {% endif %}
+    </div>
             <hr>
         {% comment %} {% e    ndfor %} {% endcomment %}
 </body>

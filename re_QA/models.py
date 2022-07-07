@@ -15,6 +15,9 @@ class Topic(models.Model):
     comment  = models.CharField(verbose_name="コメント",max_length=2000)
     dt       = models.DateTimeField(verbose_name="投稿日時",default=timezone.now)
     genre    = models.CharField(verbose_name="質問のジャンル",max_length=20)
+    views    = models.IntegerField(default=0)
+    answers  = models.IntegerField(default=0)
+    answered = models.IntegerField(default=0)
     def one_week():
         return timezone.now() + timezone.timedelta(days=7)
 
@@ -32,12 +35,7 @@ class Topic(models.Model):
     #TODO:質問の期限が来たら回答を受け付けないようにする
     
 
-class TopicReply(models.Model):
-    topic    = models.ForeignKey(Topic,verbose_name="対象トピック",on_delete=models.CASCADE)
-    
-    name     = models.CharField(verbose_name="投稿者の名前",max_length=100,default="匿名")
-    comment  = models.CharField(verbose_name="コメント",max_length=2000)
-    dt       = models.DateTimeField(verbose_name="投稿日時",default=timezone.now)
+
     
 #質問に対して、一次回答は回答者登録者のみでき、二次以降は誰でも回答可能に。
 
@@ -68,9 +66,27 @@ class AnswerUser(models.Model):
     
     
 class AnswerUserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
     nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
-    
+    points   = models.IntegerField(default=0)
+    questions= models.IntegerField(default=0)
+    answers  = models.IntegerField(default=0)
+
+class TopicReply(models.Model):
+    topic    = models.ForeignKey(Topic,verbose_name="対象トピック",on_delete=models.CASCADE)
+    user     = models.ForeignKey(AnswerUserProfile,on_delete=models.CASCADE)
+    name     = models.CharField(verbose_name="投稿者の名前",max_length=100,default="匿名")
+    comment  = models.CharField(verbose_name="コメント",max_length=2000)
+    votes    = models.IntegerField(default=0)
+    accepted = models.IntegerField(default=0)
+    dt       = models.DateTimeField(verbose_name="投稿日時",default=timezone.now)
+
+class Vote(models.Model):
+	answer   = models.ForeignKey(TopicReply,on_delete=models.CASCADE)
+	user     = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+	vote     = models.IntegerField(default=0)
+	def __str__(self):
+		return self.answer
 
 class ValidationCode(models.Model):
     code = models.CharField(verbose_name='登録用コード', max_length=30)
