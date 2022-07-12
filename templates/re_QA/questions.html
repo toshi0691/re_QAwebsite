@@ -13,7 +13,7 @@
 {% comment %} <form class="keyword_search_form" method="Get" action="">
 <input class="keyword_search_input" type="text" placeholder="Search" aria-label="Search" name="keyword">
 <button class="keyword_search_button" type="submit">検索</button> {% endcomment %}
-<p><a href="{% url 're_QA:searched_questions' %}">検索ページ</a></p>
+
 <body>
     <div class="navbar">
             <h1>不動産質問サイト</h1>
@@ -22,7 +22,7 @@
                     <h6><a href="/">TOP</a></h6>
                     <h6><a href="/questions">質問一覧</a></h6>
                     <h6><a href="/answerers">回答者一覧</a></h6>
-                
+
             </nav>
             <div class="login" style="font-size: 15px;">
                 {% if request.user.is_authenticated %}
@@ -34,6 +34,16 @@
                     <p><a href="{% url 'account_login' %}">新規会員登録・ログイン</a></p>
                 {% endif %}
             </div>
+    </div>
+    <div class="links">
+        {% if request.user.is_authenticated %}
+			<p style="color: #3498db;text-align: center;">{{ request.user.u_first_name }} さん</p>
+		{% if profile.image %}
+			<img src='{{ profile.image.url }}' id="image1"/>
+		{% else %}
+			<img src='{% static "image/default_user.png" %}' id="image1"/>
+		{% endif %}
+        {% endif %}
     </div>
     <div class="content">
         <table style="width: 100%;border-spacing: 0px;min-height: 100%;">
@@ -51,6 +61,7 @@
                 <a href="{% url "re_QA:index" %}" style="color: #8c97b4;"><p class="{{ index }}" style="display: inline-block;">Views</p></a>
             </div>
         </div>
+        <p><a href="{% url 're_QA:searched_questions' %}">検索ページ</a></p>
         {% for topic in topics %}
             <!--<div class="topic">
                 <div>{{ topic.dt }}</div>
@@ -77,7 +88,7 @@
                         <a class="btn btn-outline-primary" href="{% url 're_QA:single' topic.id %}">詳細</a>
                 </div>
             </div>
-        
+            <p style="background-color: #1abc9c;" class="button"><a href="{% url "re_QA:answer_accept" topic.id %}"><i class="fa fa-check" aria-hidden="true"></i> GOOD</a></p>
         {% endfor %} 
     </div>   
 </body>

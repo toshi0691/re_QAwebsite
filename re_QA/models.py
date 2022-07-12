@@ -7,6 +7,12 @@ from django.core.validators import MinValueValidator
 
 import uuid 
 # Create your models here.
+class AnswerUserProfile(models.Model):
+    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
+    points   = models.IntegerField(default=0)
+    questions= models.IntegerField(default=0)
+    answers  = models.IntegerField(default=0)
 class Topic(models.Model):
 
     id       = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
@@ -65,12 +71,12 @@ class AnswerUser(models.Model):
     #     return self.company
     
     
-class AnswerUserProfile(models.Model):
-    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
-    nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
-    points   = models.IntegerField(default=0)
-    questions= models.IntegerField(default=0)
-    answers  = models.IntegerField(default=0)
+# class AnswerUserProfile(models.Model):
+#     user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+#     nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
+#     points   = models.IntegerField(default=0)
+#     questions= models.IntegerField(default=0)
+#     answers  = models.IntegerField(default=0)
 
 class TopicReply(models.Model):
     topic    = models.ForeignKey(Topic,verbose_name="対象トピック",on_delete=models.CASCADE)

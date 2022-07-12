@@ -100,6 +100,24 @@ class QuestionsView(View):
       
 questions    = QuestionsView.as_view()
 
+
+
+def Answer_accept(request,pk=None):
+    instance=get_object_or_404(TopicReply,id=pk)
+    if request.user == instance.question.user.user:
+        instance.accepted = 1
+        instance.user.points = instance.user.points + 10
+        instance.user.save()
+        instance.save()
+        instance.question.answered = 1
+        instance.question.save()
+        return HttpResponseRedirect('/question/'+str(instance.question.id)+'/')
+    else:
+        messages.error(request, "User unauthorized.")
+    return HttpResponseRedirect('/question/'+str(instance.question.id)+'/')
+
+
+
 class SearchedQuestionsView(generic.ListView):
     model = Topic
     def get_queryset(self):
@@ -218,7 +236,7 @@ class EachAnswererProfileView(View):
             val = ""
             percent = 100
 
-        queryset_list=Topic.objects.all().filter(user=profile).order_by("-dt")
+        queryset_list=Topic.objects.all().filter(user=profile.user).order_by("-dt")
         paginator = Paginator(queryset_list, 10)
         page = request.GET.get('page')
         username='Login'
@@ -273,7 +291,7 @@ class UpdateQuestionUserView(View):
         if not request.user.is_authenticated:
             print("未認証")
             return redirect("account_login")
-        
+
         context = {}
 
         context["users"]         = CustomUser.objects.all()
@@ -409,6 +427,10 @@ class UpdateProfileView(View):
             print(form.errors)
 
         return redirect("re_QA:update_profile")
+    
+update_profile   = UpdateProfileView.as_view()
+    
+    
 #関数ベースのビュー
 '''
 def index(request):
