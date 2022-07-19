@@ -38,6 +38,7 @@
         <div>名前:{{ reply.name }}</div>
         <div>{{ reply.comment }}</div>
     </div>
+    <p style="background-color: #1abc9c;" class="button"><a href="{% url "re_QA:answer_accept" reply.id %}"><i class="fa fa-check" aria-hidden="true"></i> GOOD</a></p>
     {% endfor %}
 
 

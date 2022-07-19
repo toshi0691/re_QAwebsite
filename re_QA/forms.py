@@ -14,26 +14,31 @@ class TopicReplyForm(forms.ModelForm):
 
     class Meta:
         model   = TopicReply
-        fields  = [ "comment","name","topic" ]
+        fields  = [ "comment","name","topic"]
         
     def save(self):
-        topic_reply = super(TopicReplyForm, self).save(commit=True)
-        user =  topic_reply.topic.user
+        topic_reply = super(TopicReplyForm, self).save(commit=False)
+        topic_reply.user = AnswerUser.objects.filter(user=self.user).first()
+        topic_reply.save()
 
         # 質問者のメールアドレスを見てメール送信
-        question_user = QuestionUser.objects.filter(user=user).first()
-        if question_user and question_user.email_notification:
-            from django.core.mail import send_mail
-            from config.settings import EMAIL_HOST_USER
-            send_mail(
-                '回答がありました',
-                topic_reply.comment,
-                EMAIL_HOST_USER,
-                [user.email],
-                fail_silently=False,
-            )
+        # 要質問　filterの中の書き方と、'QuerySet' object has no attribute 'email_notification'エラー問題
+        # question_user = QuestionUser.objects.filter(user=topic_reply.user).first()
+        # if question_user and question_user.email_notification:
+        #     from django.core.mail import send_mail
+        #     from config.settings import EMAIL_HOST_USER
+        #     send_mail(
+        #         '回答がありました',
+        #         topic_reply.comment,
+        #         EMAIL_HOST_USER,
+        #         [user.email],
+        #         fail_silently=False,
+        #     )
 
         return topic_reply
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user',None)
+        super(TopicReplyForm, self).__init__(*args, **kwargs)
 
 class QuestionUserForm(forms.ModelForm):
     

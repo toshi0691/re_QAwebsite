@@ -28,7 +28,7 @@
             <a href="{% url 'account_logout' %}">ログアウト</a>
             <a href="{% url 're_QA:update_question_user' %}">会員登録情報変更ページ</a>
             {% if request.user.answeruser %}
-                <a href="{% url 're_QA:create_profile' %}">プロフィール作成ページ</a>
+                <a href="{% url 're_QA:create_profile' request.user.id %}">プロフィール作成ページ</a>
             {% endif %}
             
 

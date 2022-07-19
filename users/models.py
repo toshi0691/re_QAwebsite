@@ -17,7 +17,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     username_validator = UnicodeUsernameValidator()
 
-    id                 = models.UUIDField( default=uuid.uuid4, primary_key=True, editable=False )
+    # id                 = models.UUIDField( default=uuid.uuid4, primary_key=True, editable=False )
     username           = models.CharField(
                             _('username'),
                             max_length=150,

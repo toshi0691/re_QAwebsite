@@ -7,15 +7,11 @@ from django.core.validators import MinValueValidator
 
 import uuid 
 # Create your models here.
-class AnswerUserProfile(models.Model):
-    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
-    nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
-    points   = models.IntegerField(default=0)
-    questions= models.IntegerField(default=0)
-    answers  = models.IntegerField(default=0)
+
+    
 class Topic(models.Model):
 
-    id       = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    # id       = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     user     = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name="ユーザー",on_delete=models.CASCADE)
     name     = models.CharField(verbose_name="投稿者の名前",max_length=100,default="匿名")
     comment  = models.CharField(verbose_name="コメント",max_length=2000)
@@ -45,6 +41,21 @@ class Topic(models.Model):
     
 #質問に対して、一次回答は回答者登録者のみでき、二次以降は誰でも回答可能に。
 
+class AnswerUser(models.Model):
+    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
+    company  = models.CharField(verbose_name="回答者の会社名",max_length=30)
+    approval    = models.BooleanField(verbose_name="回答権利",default=False)
+    registration_time = models.DateTimeField(auto_now_add=True, blank=True)
+    count_commented = models.IntegerField(default=0)
+    count_good = models.IntegerField(default=0)
+    count_bad = models.IntegerField(default=0)
+
+class AnswerUserProfile(models.Model):
+    user     = models.OneToOneField(AnswerUser,verbose_name="ユーザー", on_delete=models.CASCADE)
+    nickname = models.CharField(verbose_name="ペンネーム",max_length=30)
+    points   = models.IntegerField(default=0)
+    questions= models.IntegerField(default=0)
+    answers  = models.IntegerField(default=0)
 
 class QuestionUser(models.Model):
     user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
@@ -58,14 +69,7 @@ class QuestionUser(models.Model):
     #     template = '{0.resident_area}{0.resident_style}'
     #     return template.format(self)
     
-class AnswerUser(models.Model):
-    user     = models.OneToOneField(settings.AUTH_USER_MODEL,verbose_name="ユーザー", on_delete=models.CASCADE)
-    company  = models.CharField(verbose_name="回答者の会社名",max_length=30)
-    approval    = models.BooleanField(verbose_name="回答権利",default=False)
-    registration_time = models.DateTimeField(auto_now_add=True, blank=True)
-    count_commented = models.IntegerField(default=0)
-    count_good = models.IntegerField(default=0)
-    count_bad = models.IntegerField(default=0)
+
     
     # def __str__(self):
     #     return self.company
@@ -80,7 +84,8 @@ class AnswerUser(models.Model):
 
 class TopicReply(models.Model):
     topic    = models.ForeignKey(Topic,verbose_name="対象トピック",on_delete=models.CASCADE)
-    user     = models.ForeignKey(AnswerUserProfile,on_delete=models.CASCADE)
+    # id       = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    user     = models.ForeignKey(AnswerUser,on_delete=models.CASCADE,null=True)
     name     = models.CharField(verbose_name="投稿者の名前",max_length=100,default="匿名")
     comment  = models.CharField(verbose_name="コメント",max_length=2000)
     votes    = models.IntegerField(default=0)

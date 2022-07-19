@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.views import View,generic
 from .models import Topic,AnswerUser,QuestionUser,AnswerUserProfile
 from .forms import AnswerUserForm, TopicForm, AnswerUserProfileForm
@@ -104,17 +106,17 @@ questions    = QuestionsView.as_view()
 
 def Answer_accept(request,pk=None):
     instance=get_object_or_404(TopicReply,id=pk)
-    if request.user == instance.question.user.user:
+    if request.user == instance.topic.user:
         instance.accepted = 1
-        instance.user.points = instance.user.points + 10
+        instance.user.points = instance.user.answeruserprofile.points + 10
         instance.user.save()
         instance.save()
-        instance.question.answered = 1
-        instance.question.save()
-        return HttpResponseRedirect('/question/'+str(instance.question.id)+'/')
+        instance.topic.answered = 1
+        instance.topic.save()
+        return HttpResponseRedirect('/single/'+str(instance.topic.id)+'/')
     else:
         messages.error(request, "User unauthorized.")
-    return HttpResponseRedirect('/question/'+str(instance.question.id)+'/')
+        return HttpResponseRedirect('/single/'+str(instance.topic.id)+'/')
 
 
 
@@ -164,8 +166,9 @@ class SingleView(View):
         #リクエストボディに対して何かを追加したい時、.copy()メソッドを使ってリクエストオブジェクトをコピーする
         copied          = request.POST.copy()
         copied["topic"] = pk
-
-        form    = TopicReplyForm(copied)
+        
+        
+        form    = TopicReplyForm(copied, user=request.user)
         
 
         if form.is_valid():
@@ -348,7 +351,7 @@ update_question_user   = UpdateQuestionUserView.as_view()
 
 class CreateProfileView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk, *args, **kwargs):
 
         if not request.user.is_authenticated :
             print("未認証")
@@ -356,11 +359,11 @@ class CreateProfileView(View):
         
         context = {}
 
-        context["users"]         = AnswerUserProfile.objects.all()
+        context["users"]         = AnswerUserProfile.objects.filter(id=pk).first()
         
         return render(request,"re_QA/create_profile.html",context)
     
-    def post(self, request, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
     
     
         copied          = request.POST.copy()
